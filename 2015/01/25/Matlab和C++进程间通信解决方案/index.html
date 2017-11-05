@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="C++,Matlab," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="老大让尝试一个算法预言，之前我们的算法验证都是基于某工具平台，我司的工具平台改起来真心麻烦，大量的人力都花在原型工具的测试上了，之前做硬件加速的时候自己也已经用C++实现了核心的计算部分（下图中褐色部分）。于是考虑是不是基于matlab搭建一个原型工具平台，利用matlab强大的图形功能和算法库，这样大家做一些算法验证要方便很多。 也就是用matlab实现蓝色部分：  最初想到的实现方案是把C++">
+<meta name="keywords" content="C++,Matlab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Matlab和C++进程间通信解决方案">
+<meta property="og:url" content="http://yezhangxiang.com/2015/01/25/Matlab和C++进程间通信解决方案/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="老大让尝试一个算法预言，之前我们的算法验证都是基于某工具平台，我司的工具平台改起来真心麻烦，大量的人力都花在原型工具的测试上了，之前做硬件加速的时候自己也已经用C++实现了核心的计算部分（下图中褐色部分）。于是考虑是不是基于matlab搭建一个原型工具平台，利用matlab强大的图形功能和算法库，这样大家做一些算法验证要方便很多。 也就是用matlab实现蓝色部分：  最初想到的实现方案是把C++">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/flow-chart-with-hardware.png">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Matlab和C++进程间通信解决方案">
+<meta name="twitter:description" content="老大让尝试一个算法预言，之前我们的算法验证都是基于某工具平台，我司的工具平台改起来真心麻烦，大量的人力都花在原型工具的测试上了，之前做硬件加速的时候自己也已经用C++实现了核心的计算部分（下图中褐色部分）。于是考虑是不是基于matlab搭建一个原型工具平台，利用matlab强大的图形功能和算法库，这样大家做一些算法验证要方便很多。 也就是用matlab实现蓝色部分：  最初想到的实现方案是把C++">
+<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/flow-chart-with-hardware.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2015/01/25/Matlab和C++进程间通信解决方案/"/>
+
+
+
+
+
+  <title>Matlab和C++进程间通信解决方案 | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2015/01/25/Matlab和C++进程间通信解决方案/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Matlab和C++进程间通信解决方案</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-01-25T22:12:00+08:00">
+                2015-01-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/编程语言/" itemprop="url" rel="index">
+                    <span itemprop="name">编程语言</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>老大让尝试一个算法预言，之前我们的算法验证都是基于某工具平台，我司的工具平台改起来真心麻烦，大量的人力都花在原型工具的测试上了，之前做硬件加速的时候自己也已经用C++实现了核心的计算部分（下图中褐色部分）。于是考虑是不是基于matlab搭建一个原型工具平台，利用matlab强大的图形功能和算法库，这样大家做一些算法验证要方便很多。</p>
+<p>也就是用matlab实现蓝色部分：</p>
+<p><img src="http://yangxixi-blog.qiniudn.com/flow-chart-with-hardware.png" alt=""></p>
+<p>最初想到的实现方案是把C++代码打包成dll让matlab调用，但是好像接口必须是mexFuntion，但是原来的C++代码有好几个接口函数，当然一个变通的方案是设置maxFunction的第一个参数来制定mexFunction实现某个接口功能，但是这样还是有问题，原来的数据都是在C++进程中保存的，现在如果变成dll调用，必须吧matlab中保存的数据传给dll来使用，感觉很麻烦，而且效率可能是个问题。</p>
+<p>Google了一下，发现matlab自带<a href="http://cn.mathworks.com/help/instrument/using-tcpip-server-sockets.html;jsessionid=13807c434c59aabbae657ef72758" target="_blank" rel="external">内存映射文件</a>功能和<a href="http://cn.mathworks.com/help/matlab/ref/memmapfile.html" target="_blank" rel="external">socket</a>功能，也很方便，那不如就直接采用原来的实现方案：消息用socket交互，大量的数据就保存为内存映射文件到本地，再通过socket发送路径来交互。这样原来的C++代码就可以完全不用改了。</p>
+<p>但是还是有个问题，之前的socket发送的消息我是这么设计的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">	int ID;</div><div class="line">	BYTE lparam[lparamSize];</div><div class="line">&#125;COMMAND;</div></pre></td></tr></table></figure>
+<p>但是用matlab送消息的时候就有问题了：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">t = tcpip(&apos;localhost&apos;, 30000, &apos;NetworkRole&apos;, &apos;client&apos;);</div><div class="line">fopen(t)</div><div class="line">fwrite(t, data)</div></pre></td></tr></table></figure></p>
+<p>发送的data只能是数字类型或者字符串：</p>
+<blockquote>
+<p>The input argument A must be numeric or a string.</p>
+</blockquote>
+<p>发送struct或者cell都不行，其实用whos命令看一下就会发现，matlab的struct或者cell大小都不是简单的元素之和:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; a = &#123;int32(5), &apos;12345&apos;&#125;;</div><div class="line">&gt;&gt; b = int32(5);</div><div class="line">&gt;&gt; c = &apos;12345&apos;;</div><div class="line">&gt;&gt; whos</div><div class="line">  Name      Size            Bytes  Class    Attributes</div><div class="line"></div><div class="line">  a         1x2               238  cell               </div><div class="line">  b         1x1                 4  int32              </div><div class="line">  c         1x5                10  char</div></pre></td></tr></table></figure></p>
+<p>而且matlab中一个char是2个字节，但是发送socket的内容一个char只占用一个字节，和c是一样的。<br>所以一个变通的方式是把ID也设置为char型，反正我要交互的方式还不到10种，传送的内存也用char，本来传送的也就是路径和一些参数值，参数值本来是用二进制传输的，先改成字符串，因为数量不多，效率影响不大。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">typedef struct</div><div class="line">&#123;</div><div class="line">	BYTE ID;</div><div class="line">	BYTE lparam[lparamSize];</div><div class="line">&#125;COMMAND;</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/Matlab/" rel="tag"># Matlab</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/01/17/硬件加速和C++加速的对比/" rel="next" title="硬件加速和C++加速的对比">
+                <i class="fa fa-chevron-left"></i> 硬件加速和C++加速的对比
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/03/Hexo MathJax插件/" rel="prev" title="Hexo MathJax插件">
+                Hexo MathJax插件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

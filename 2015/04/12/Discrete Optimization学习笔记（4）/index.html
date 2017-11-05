@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Discrete Optimization,Coursera," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这篇记录一下解第3题大作业Traveling Salesman Problem的过程：  实现greed函数，用贪心法，从第一个点开始，选择距离最近的没有走过的点作为下一个点，直到所有点都成为走过的点，但是这次贪心法没有像在Graph Coloring中那样取得好成绩，6个测试用例得分为：3 + 3 + 3 + 3 + 3 + 0 = 15。problem 6因为点太多内存溢出了，我的实现保存了所">
+<meta name="keywords" content="Discrete Optimization,Coursera">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Discrete Optimization学习笔记（4）">
+<meta property="og:url" content="http://yezhangxiang.com/2015/04/12/Discrete Optimization学习笔记（4）/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="这篇记录一下解第3题大作业Traveling Salesman Problem的过程：  实现greed函数，用贪心法，从第一个点开始，选择距离最近的没有走过的点作为下一个点，直到所有点都成为走过的点，但是这次贪心法没有像在Graph Coloring中那样取得好成绩，6个测试用例得分为：3 + 3 + 3 + 3 + 3 + 0 = 15。problem 6因为点太多内存溢出了，我的实现保存了所">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_greed.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_opt_2.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_opt_k_4.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_delaynay.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_insert_node.png">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Discrete Optimization学习笔记（4）">
+<meta name="twitter:description" content="这篇记录一下解第3题大作业Traveling Salesman Problem的过程：  实现greed函数，用贪心法，从第一个点开始，选择距离最近的没有走过的点作为下一个点，直到所有点都成为走过的点，但是这次贪心法没有像在Graph Coloring中那样取得好成绩，6个测试用例得分为：3 + 3 + 3 + 3 + 3 + 0 = 15。problem 6因为点太多内存溢出了，我的实现保存了所">
+<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/tsp_greed.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2015/04/12/Discrete Optimization学习笔记（4）/"/>
+
+
+
+
+
+  <title>Discrete Optimization学习笔记（4） | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2015/04/12/Discrete Optimization学习笔记（4）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Discrete Optimization学习笔记（4）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-12T00:00:00+08:00">
+                2015-04-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这篇记录一下解第3题大作业<a href="https://spark-public.s3.amazonaws.com/optimization/assignments/003/tsp.zip" target="_blank" rel="external">Traveling Salesman Problem</a>的过程：</p>
+<ul>
+<li>实现greed函数，用贪心法，从第一个点开始，选择距离最近的没有走过的点作为下一个点，直到所有点都成为走过的点，但是这次贪心法没有像在Graph Coloring中那样取得好成绩，6个测试用例得分为：3 + 3 + 3 + 3 + 3 + 0 = 15。problem 6因为点太多内存溢出了，我的实现保存了所有点之间的距离，也就是n个点的话，距离矩阵有$n^2$。problem 6 有33810个点，太多了。<br>problem 1 的结果为：<img src="http://yangxixi-blog.qiniudn.com/tsp_greed.png" alt=""></li>
+<li>实现LS 3中的2-opt方法，在贪心法的基础上，如果两个线段相交，swap两个线段，直到没有线段相交，得分为7 + 7 + 7 + 3 + 3 + 0 = 27.<br>problem 1 的结果为：<img src="http://yangxixi-blog.qiniudn.com/tsp_opt_2.png" alt=""></li>
+<li>实现LS 3中的k-opt方法，得出的结果比2-opt略好，但是得分没有变化7 + 7 + 7 + 3 + 3 + 0 = 27.<br>problem 1 的结果为：<img src="http://yangxixi-blog.qiniudn.com/tsp_opt_k_4.png" alt=""></li>
+<li><p>于是想试试用Constraint Programming是否能算出规模最小的problem 1的最优解：</p>
+<ul>
+<li>用delaunay三角剖分，每次找下一个点只搜索相连的邻点，如果邻点都已经走过，回溯。上网找了一下，早已有反例证明，TSP问题的最优解不一定是delaynay三角剖分的子图，不过用这方法找的结果应该不会太差。<img src="http://yangxixi-blog.qiniudn.com/tsp_delaynay.png" alt=""></li>
+<li><p>运用branch and bound方法，可以这样relaxation estimate：已连线段的距离+头节点的到未走过的节点的最短距离/2+尾节点到未走过的节点的距离/2+$\sum$当前未走过的节点到其他未走过的节点的最短距离+第二短距离之和/2.好拗口，看不懂我也不管了 ┐(′-｀)┌</p>
+<p>原来还对自己想到这个relaxation很得意，没想到也没什么用，尝试了一下，21个点的时候还是很快就得到答案了，但是31个点就跑不出来了，规模最小的测试用例problem 1都有51个点！这条路看来走不通</p>
+</li>
+</ul>
+</li>
+<li>看了一下<a href="https://class.coursera.org/optimization-003/forum/thread?thread_id=58" target="_blank" rel="external">论坛</a>上的讨论，实现了所谓的2.5-opt，其实就是随机产生一组顺序序列，然后按这个顺序添加节点，添加的时候遍历已连节点的位置，添加到最好的位置，直接简单粗暴的重复1000次，然后取最好的一次结果，感觉这个方法好丑陋，但是结果居然不错：10 + 10 + 7 + 7 + 7 + 0 = 41.<br>对problem 1 这个应该是最优解：<img src="http://yangxixi-blog.qiniudn.com/tsp_insert_node.png" alt=""><br>提交这中方法时优化了一下时间：<ul>
+<li>计算解的长度没必要都重新从头加到尾，可以由原来的解的长度加上该变量得到；</li>
+<li>没必要真的每次把当前节点插入解再删除，python中的list应该是数组而不是链表，频繁的插入删除非常慢。</li>
+</ul>
+</li>
+<li>还实现了tabu search：<ul>
+<li>领域的定义为所有点的delaunay相邻点的线段的2-opt中的swap</li>
+<li>tabu table中保存的是解的距离长度，长度保存的是float型，不同的解的长度几乎不可能相同，保存解的长度和保存整个解应该效果是一样的。<br>但是效果还不如简单粗暴的来1000次取最佳，感觉我的tabu search是不是有问题啊，graph coloring和这个问题都没有什么效果。</li>
+</ul>
+</li>
+<li>最优优化了一下内存，把保存所有的距离改为只保存delaunay邻点之间的距离，原来保存所有距离用的数据结构是list[list]，改为dict[dict]发现非常慢，而且也非常占内存，跟了一下原来是第一层dict的问题（感觉python的dict查找比C++的map慢很多诶），其实第一层没必要用dict，规模和点数是相同的，用下标索引即可，于是改成list[dict]就好多了。最后的得分是：10 + 10 + 7 + 7 + 7 + 7 = 48. problem 1 - 5都是重复1000次取最好值，problem 5花了1.5小时，problem 6只重复一次，也已经花了一个小时。</li>
+</ul>
+<p>其实还有一些优化空间，比如没有考虑symmetry，1-&gt;2-&gt;3-&gt;4-&gt;1和 2-&gt;3-&gt;4-&gt;1-&gt;2 ，1-&gt;4-&gt;3-&gt;2-&gt;1 是同一个解，可以固定解的第一个值来规避第一种symmetry。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Discrete-Optimization/" rel="tag"># Discrete Optimization</a>
+          
+            <a href="/tags/Coursera/" rel="tag"># Coursera</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/04/05/Discrete Optimization学习笔记（3）/" rel="next" title="Discrete Optimization学习笔记（3）">
+                <i class="fa fa-chevron-left"></i> Discrete Optimization学习笔记（3）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/20/matlab编程备忘（持续更新）/" rel="prev" title="matlab编程备忘（持续更新）">
+                matlab编程备忘（持续更新） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

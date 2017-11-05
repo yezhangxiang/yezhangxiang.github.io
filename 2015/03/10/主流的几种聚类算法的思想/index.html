@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Algorithm,cluster," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="平时工作中还挺经常用到聚类算法，平日里用k-mean比较多，整理一下主流的聚类算法，主要参考聚类算法研究和各种聚类算法的比较。主流的聚类算法可以大致分成层次化聚类算法、划分式聚类算法、基于密度和网格的聚类算法和其他聚类算法，如下图： 层次聚类算法MATLAB的Hierarchical clustering中给了很好的解释，比如如下5个点，初始情况下看成5个类每次合并最近的两个类，就可以得到如下的分">
+<meta name="keywords" content="Algorithm,cluster">
+<meta property="og:type" content="article">
+<meta property="og:title" content="主流的几种聚类算法的思想">
+<meta property="og:url" content="http://yezhangxiang.com/2015/03/10/主流的几种聚类算法的思想/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="平时工作中还挺经常用到聚类算法，平日里用k-mean比较多，整理一下主流的聚类算法，主要参考聚类算法研究和各种聚类算法的比较。主流的聚类算法可以大致分成层次化聚类算法、划分式聚类算法、基于密度和网格的聚类算法和其他聚类算法，如下图： 层次聚类算法MATLAB的Hierarchical clustering中给了很好的解释，比如如下5个点，初始情况下看成5个类每次合并最近的两个类，就可以得到如下的分">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/cluster_algorithms.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/multivariate_stats4.gif">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/multivariate_stats19.gif">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/stats_9.40.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/stats_9.43.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/MCL_algorithm.png">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="主流的几种聚类算法的思想">
+<meta name="twitter:description" content="平时工作中还挺经常用到聚类算法，平日里用k-mean比较多，整理一下主流的聚类算法，主要参考聚类算法研究和各种聚类算法的比较。主流的聚类算法可以大致分成层次化聚类算法、划分式聚类算法、基于密度和网格的聚类算法和其他聚类算法，如下图： 层次聚类算法MATLAB的Hierarchical clustering中给了很好的解释，比如如下5个点，初始情况下看成5个类每次合并最近的两个类，就可以得到如下的分">
+<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/cluster_algorithms.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2015/03/10/主流的几种聚类算法的思想/"/>
+
+
+
+
+
+  <title>主流的几种聚类算法的思想 | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2015/03/10/主流的几种聚类算法的思想/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">主流的几种聚类算法的思想</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-03-10T00:00:00+08:00">
+                2015-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/资料整理/" itemprop="url" rel="index">
+                    <span itemprop="name">资料整理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>平时工作中还挺经常用到聚类算法，平日里用k-mean比较多，整理一下主流的聚类算法，主要参考<a href="http://jos.org.cn/ch/reader/create_pdf.aspx?file_no=20080106&amp;journal_id=jos" target="_blank" rel="external">聚类算法研究</a>和<a href="http://blog.163.com/qianshch@126/blog/static/48972522201092254141315/" target="_blank" rel="external">各种聚类算法的比较</a>。<br>主流的聚类算法可以大致分成层次化聚类算法、划分式聚类算法、基于密度和网格的聚类算法和其他聚类算法，如下图：<br><img src="http://yangxixi-blog.qiniudn.com/cluster_algorithms.png" alt=""></p>
+<h1 id="层次聚类算法"><a href="#层次聚类算法" class="headerlink" title="层次聚类算法"></a>层次聚类算法</h1><p>MATLAB的<a href="http://cn.mathworks.com/help/stats/hierarchical-clustering.html" target="_blank" rel="external">Hierarchical clustering</a>中给了很好的解释，比如如下5个点，初始情况下看成5个类<br><img src="http://yangxixi-blog.qiniudn.com/multivariate_stats4.gif" alt=""><br>每次合并最近的两个类，就可以得到如下的分类结果<br><img src="http://yangxixi-blog.qiniudn.com/multivariate_stats19.gif" alt=""><br>对应的层级关系如下：<br><img src="http://yangxixi-blog.qiniudn.com/stats_9.40.png" alt=""><br>再由设置的分类个数，就可以根据层级关系得到分类结果了：<br><img src="http://yangxixi-blog.qiniudn.com/stats_9.43.png" alt=""></p>
+<h1 id="划分式聚类算法"><a href="#划分式聚类算法" class="headerlink" title="划分式聚类算法"></a>划分式聚类算法</h1><h2 id="基于图论的聚类算法"><a href="#基于图论的聚类算法" class="headerlink" title="基于图论的聚类算法"></a>基于图论的聚类算法</h2><p>图论分裂聚类算法的主要思想是:构造一棵关于数据的最小生成树(minimal spanning tree,简称MST),通过删除最小生成树的最长边来形成类.<br><img src="http://yangxixi-blog.qiniudn.com/MCL_algorithm.png" alt=""></p>
+<h2 id="K均值聚类"><a href="#K均值聚类" class="headerlink" title="K均值聚类"></a>K均值聚类</h2><p>知乎问题：<a href="http://www.zhihu.com/question/22263928" target="_blank" rel="external">能否用易懂的语言简单介绍下聚类？</a>有个回答对k-means解释的很好：</p>
+<blockquote>
+<p>话说在小镇上有三个教会，每个镇民都是信徒，所以嘛，一定要参加一个教会。<br>每个教会定期举办集会，为了让大家尽量少跑腿，集会就选在镇子里大家总跑腿数虽少的地点。<br>总跑远路的信徒们心里不爽，心想，隔壁那教会好像也蛮不错，而且集会点离我家挺近的，不如我换个教会？所以，就这样，一轮下来，很多人换了教会。<br>因为有新人来了老人离开，所以原来的集会点不是最优的啦，要重新确定集合点，下一次的集会会在新地点举办。<br>新集会举办之后，又有人不满意了，就又换教会。如此这般多次之后，终于大家都找到举办集会点离家最近的教会了，所以这折腾就停了，我们把这叫做“收敛”。<br>这就是聚类。</p>
+</blockquote>
+<h2 id="模糊聚类算法"><a href="#模糊聚类算法" class="headerlink" title="模糊聚类算法"></a>模糊聚类算法</h2><p>为克服非此即彼的分类缺点，出现了以模糊集合论为数学基础的聚类分析(fuzzy c-means, 简称FCM)。用模糊数学的方法进行聚类分析，初始化隶属矩阵；由最后的隶属矩阵确定数据所属的类，显示最后的聚类结果。FCM 算法是图像分割使用最多的方法之一.</p>
+<h1 id="基于网格密度的聚类算法"><a href="#基于网格密度的聚类算法" class="headerlink" title="基于网格密度的聚类算法"></a>基于网格密度的聚类算法</h1><p>想法比较简单，对散点做栅格化，根据每个网格内的点数得到网格的密度，再生成密度等高线，根据等高线既可以做聚类了，但是感觉这种算法应用场景比较受约束。</p>
+<h1 id="其他聚类算法"><a href="#其他聚类算法" class="headerlink" title="其他聚类算法"></a>其他聚类算法</h1><p>因为聚类算法可以看作是一个最优化为问题，最小化类内点之间的距离，最大化类之间的距离，所以也可以利用寻优算法来做聚类。比如基于进化理论的方法，基于人工神经网络方法，基于蚁群系统的方法。</p>
+<p>应用聚类算法中经常碰到一个问题，如何设置聚类个数，推荐<a href="http://freemind.pluskid.org/machine-learning/deciding-the-number-of-clusterings/" target="_blank" rel="external">Deciding the Number of Clusterings</a>做了比较好的研究。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+            <a href="/tags/cluster/" rel="tag"># cluster</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/03/05/利用delaunay三角剖分定义基站间层级/" rel="next" title="利用delaunay三角剖分定义基站间层级">
+                <i class="fa fa-chevron-left"></i> 利用delaunay三角剖分定义基站间层级
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/16/常用的距离的定义方法/" rel="prev" title="常用的距离的定义方法">
+                常用的距离的定义方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#层次聚类算法"><span class="nav-number">1.</span> <span class="nav-text">层次聚类算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#划分式聚类算法"><span class="nav-number">2.</span> <span class="nav-text">划分式聚类算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于图论的聚类算法"><span class="nav-number">2.1.</span> <span class="nav-text">基于图论的聚类算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#K均值聚类"><span class="nav-number">2.2.</span> <span class="nav-text">K均值聚类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模糊聚类算法"><span class="nav-number">2.3.</span> <span class="nav-text">模糊聚类算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于网格密度的聚类算法"><span class="nav-number">3.</span> <span class="nav-text">基于网格密度的聚类算法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#其他聚类算法"><span class="nav-number">4.</span> <span class="nav-text">其他聚类算法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

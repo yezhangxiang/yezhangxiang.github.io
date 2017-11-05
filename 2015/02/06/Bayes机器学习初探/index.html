@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Bayes," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="最近和老大在讨论一个idea，利用转移概率矩阵修正手机定位结果，问题就可以一般化为：某片区域有$n$个栅格，可以用训练库里的数据统计出  第$i$个栅格中GPS的个数$g_{i}$ 第$i$个栅格中定位后的个数$l_{i}$ GPS在第$i$个栅格而定位到第$j$个栅格的概率为$a_{ij}$这三者满足：  $$\begin{equation}       %开始数学环境 \left[">
+<meta name="keywords" content="Bayes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bayes机器学习初探">
+<meta property="og:url" content="http://yezhangxiang.com/2015/02/06/Bayes机器学习初探/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="最近和老大在讨论一个idea，利用转移概率矩阵修正手机定位结果，问题就可以一般化为：某片区域有$n$个栅格，可以用训练库里的数据统计出  第$i$个栅格中GPS的个数$g_{i}$ 第$i$个栅格中定位后的个数$l_{i}$ GPS在第$i$个栅格而定位到第$j$个栅格的概率为$a_{ij}$这三者满足：  $$\begin{equation}       %开始数学环境 \left[">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/transition-probability-matrix.png">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bayes机器学习初探">
+<meta name="twitter:description" content="最近和老大在讨论一个idea，利用转移概率矩阵修正手机定位结果，问题就可以一般化为：某片区域有$n$个栅格，可以用训练库里的数据统计出  第$i$个栅格中GPS的个数$g_{i}$ 第$i$个栅格中定位后的个数$l_{i}$ GPS在第$i$个栅格而定位到第$j$个栅格的概率为$a_{ij}$这三者满足：  $$\begin{equation}       %开始数学环境 \left[">
+<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/transition-probability-matrix.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2015/02/06/Bayes机器学习初探/"/>
+
+
+
+
+
+  <title>Bayes机器学习初探 | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2015/02/06/Bayes机器学习初探/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Bayes机器学习初探</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-06T00:00:00+08:00">
+                2015-02-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法设计/" itemprop="url" rel="index">
+                    <span itemprop="name">算法设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>最近和老大在讨论一个idea，利用转移概率矩阵修正手机定位结果，问题就可以一般化为：某片区域有$n$个栅格，可以用训练库里的数据统计出</p>
+<ul>
+<li>第$i$个栅格中GPS的个数$g_{i}$</li>
+<li>第$i$个栅格中定位后的个数$l_{i}$</li>
+<li>GPS在第$i$个栅格而定位到第$j$个栅格的概率为$a_{ij}$<br>这三者满足：</li>
+</ul>
+<span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    a_{11} &amp; a_{12} &amp;...&amp; a_{13}\\  %第一行元素
+    a_{21} &amp; a_{22} &amp;...&amp; a_{23}\\  %第二行元素
+    ...\\
+    a_{n1} &amp; a_{n2} &amp;...&amp; a_{n3}\\  %第三行元素
+  \end{array}
+\right]                 %右括号
+\cdot
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    g_{1}\\
+    g_{2}\\
+    ...\\
+    g_{n}\\
+  \end{array}
+\right]                 %右括号
+ =
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    l_{1}\\
+    l_{2}\\
+    ...\\
+    l_{n}\\
+  \end{array}
+\right]                 %右括号
+\end{equation}$$</span><!-- Has MathJax -->
+<p>简写为$A \cdot \mathbf{g}=\mathbf{l}.$<br>我们假设转移概率矩阵在一定时间内不变，则对现实中的定位结果也满足$A \cdot \widetilde{\mathbf{g}}=\widetilde{\mathbf{l}}$.由训练库训练出$A$矩阵后，就可以用于修正真实的定位结果$\widetilde{\mathbf{l}}$。<br>最直观的方法就是求出$A$的逆矩阵$A^{-1}$：</p>
+<span>$$\begin{equation}
+A \cdot \mathbf{g}=\mathbf{l} \Rightarrow \mathbf{g}=A^{-1} \cdot \mathbf{l}
+\end{equation}$$</span><!-- Has MathJax -->
+<p>比如有两个栅格，真实的GPS为70条和150条，定位后的误差概率如下图：<br><img src="http://yangxixi-blog.qiniudn.com/transition-probability-matrix.png" alt=""><br>则可以用矩阵表示为：<br><span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{3}{7} &amp; \frac{3}{5}\\  %第一行元素
+    \frac{4}{7} &amp; \frac{2}{5}\\  %第二行元素
+  \end{array}
+\right]                 %右括号
+\cdot
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    70\\
+    150\\
+  \end{array}
+\right]                 %右括号
+ =
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    120\\
+    100\\
+  \end{array}
+\right]                 %右括号
+\end{equation}$$</span><!-- Has MathJax --></p>
+<p>这里系数矩阵$A$为：<br><span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{3}{7} &amp; \frac{3}{5}\\  %第一行元素
+    \frac{4}{7} &amp; \frac{2}{5}\\  %第二行元素
+  \end{array}
+\right]
+\end{equation}$$</span><!-- Has MathJax --><br>$A^{-1}$为：<br><span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{cc}
+    -\frac{7}{3} &amp; \frac{7}{2}\\  %第一行元素
+    \frac{10}{3} &amp;-\frac{5}{2}\\  %第二行元素
+  \end{array}
+\right]
+\end{equation}$$</span><!-- Has MathJax --><br>就可以反求得真实GPS数据为：<br><span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{c}
+    70\\
+    150\\
+  \end{array}
+\right]                 %右括号
+ =
+ \left[                 %左括号
+  \begin{array}{cc}
+    -\frac{7}{3} &amp; \frac{7}{2}\\  %第一行元素
+    \frac{10}{3} &amp;-\frac{5}{2}\\  %第二行元素
+  \end{array}
+\right]                 %右括号
+\cdot
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    120\\
+    100\\
+  \end{array}
+\right]                 %右括号
+\end{equation}$$</span><!-- Has MathJax --><br>但是这里有个问题，真实的场景中这个栅格数$n$是很大的，至少都是$10^4$数量级，而且一个栅格的数据一般至多也就会定位到100个栅格，所以这个$A$矩阵是非常稀疏的，非零数据只有$0.5\%$左右，$A$几乎肯定不满秩，事实上计算了一个真实场景，$n$为42000左右，秩只有$27000$，当然求不出$A^{-1}$。<br>事实上我们也没必要求$A^{-1}$需要的是求解 $A \cdot \widetilde{\mathbf{g}}=\widetilde{\mathbf{l}}$。只要满足$rank(A) = rank([A\ \widetilde{\mathbf{l}}])$理论上就能计算出$\widetilde{\mathbf{g}}$。利用MATLAB计算<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; g = A\b</div><div class="line">Warning: Matrix is singular to working precision.</div></pre></td></tr></table></figure></p>
+<p>用稀疏矩阵计算会快很多，但是结果一样<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; g = sparse(A)\b</div></pre></td></tr></table></figure></p>
+<p>42000个栅格，有10000个左右算出来是$Inf$或者$NaN$，还有7000个左右是非常大或者非常小的值，计算正确的只有40%。<br>回到上面2个栅格的例子，如果从概率的角度考虑会发现$A^{-1}$并不是$\bf{b}$返回到$\bf{g}$的概率矩阵，返回的概率矩阵根据定义也很容易得到：<br><span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    70\\
+    150\\
+  \end{array}
+\right]                 %右括号
+ =
+ \left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{1}{4} &amp; \frac{2}{5}\\  %第一行元素
+    \frac{3}{4} &amp; \frac{3}{5}\\  %第二行元素
+  \end{array}
+\right]                 %右括号
+\cdot
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    120\\
+    100\\
+  \end{array}
+\right]                 %右括号
+\end{equation}$$</span><!-- Has MathJax --></p>
+<p>令从$\bf{b}$返回$\bf{g}$的概率矩阵为$B$，则：$\mathbf{g}=B \cdot \mathbf{l}$，就可以避免求$A^{-1}$.<br>$B$矩阵可从贝叶斯定理得到,贝叶斯定理:<br>$$P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)}$$<br>可令<span>$A_{i}$</span><!-- Has MathJax --> 代表事件：GPS落在栅格$i$；令$B_{j}$代表事件：定位结果落在栅格$j$</p>
+<p>则<span>$P(B_j|A_i)$</span><!-- Has MathJax -->即<span>$a_{ij}$</span><!-- Has MathJax -->，<span>$P(A_i|B_j)$</span><!-- Has MathJax -->即<span>$b_{ij}$</span><!-- Has MathJax -->，<span>$P(A_i)$</span><!-- Has MathJax -->即<span>$\frac{g_{i}}{\sum_{k=1}^{n} {g_k}}$</span><!-- Has MathJax -->，<span>$P(B_j)$</span><!-- Has MathJax -->即<span>$\sum_{k=1}^{n} {g_k} = \sum_{k=1}^{n} {l_k}$</span><!-- Has MathJax -->即可求出$B$.
+
+<span>$$\begin{eqnarray}
+b_{ij} &amp;=&amp; P(A_i|B_j)\\
+       &amp;=&amp; \frac{P(B_j|A_i) \cdot P(A_i)}{P(B_j)} \\
+       &amp;=&amp; \frac{a_{ij} \cdot \frac{g_{i}}{\sum_{k=1}^{n} {g_k}}}{\frac{l_{j}}{\sum_{k=1}^{n} {l_k}}}\\
+       &amp;=&amp; \frac{a_{ij}  \cdot g_{i}}{l_j}
+\end{eqnarray}$$</span><!-- Has MathJax --><br><span>$a_{ij}  \cdot g_{i}$</span><!-- Has MathJax -->就是GPS在第$i$个栅格而定位到第$j$个栅格的个数，上式其实就是$B$的定义。</p>
+<p>最后用一天的数据来训练$A$矩阵，用以修正第二天的数据，效果很明显，定位采用的方式是特征库匹配定位，定为后的数据相比真实的GPS分布就像是加了一层滤波，原本很分明的热点被模糊化了，而用B矩阵修正后，有能够把结果聚拢起来，定位数据和GPS数据的偏差$norm(g-l)$约为<span>$2*10^4$</span><!-- Has MathJax -->，标准差$std(g-l)$约为200，修正后$norm(g-B\cdot l)$约为$1.2*10^4$，标准差$std(g-B\cdot l)$约为70.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Bayes/" rel="tag"># Bayes</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/03/Hexo MathJax插件/" rel="next" title="Hexo MathJax插件">
+                <i class="fa fa-chevron-left"></i> Hexo MathJax插件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/12/迭代法修正定位结果/" rel="prev" title="迭代法修正定位结果">
+                迭代法修正定位结果 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

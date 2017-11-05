@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="可展曲面,逼近," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="十二月的关键词是：做课题，可展曲面以及曲面逼近。事先申明这篇博客一点都不有趣没有可看性，而且还很长。 整个十一月确实比较闲，导致我买了不少小说时评茶叶，加入茶学社什么的。29号范飞龙叫我去给老板装UG说了这么一件事，南京某电子所的一个研究员给老板发了一个UG的pat文件，是一张曲面，要裁剪一种不可形变的平面材料粘附到这张曲面上，请教曲面上的58个控制点在平面材料上的对应点。其实核心的问题就是找一张">
+<meta name="keywords" content="可展曲面,逼近">
+<meta property="og:type" content="article">
+<meta property="og:title" content="十二月小结">
+<meta property="og:url" content="http://yezhangxiang.com/2010/12/31/十二月小结/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="十二月的关键词是：做课题，可展曲面以及曲面逼近。事先申明这篇博客一点都不有趣没有可看性，而且还很长。 整个十一月确实比较闲，导致我买了不少小说时评茶叶，加入茶学社什么的。29号范飞龙叫我去给老板装UG说了这么一件事，南京某电子所的一个研究员给老板发了一个UG的pat文件，是一张曲面，要裁剪一种不可形变的平面材料粘附到这张曲面上，请教曲面上的58个控制点在平面材料上的对应点。其实核心的问题就是找一张">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/fail-result.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/moving-least-squares.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/approach.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/final-result.png">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="十二月小结">
+<meta name="twitter:description" content="十二月的关键词是：做课题，可展曲面以及曲面逼近。事先申明这篇博客一点都不有趣没有可看性，而且还很长。 整个十一月确实比较闲，导致我买了不少小说时评茶叶，加入茶学社什么的。29号范飞龙叫我去给老板装UG说了这么一件事，南京某电子所的一个研究员给老板发了一个UG的pat文件，是一张曲面，要裁剪一种不可形变的平面材料粘附到这张曲面上，请教曲面上的58个控制点在平面材料上的对应点。其实核心的问题就是找一张">
+<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/fail-result.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2010/12/31/十二月小结/"/>
+
+
+
+
+
+  <title>十二月小结 | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2010/12/31/十二月小结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">十二月小结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2010-12-31T23:48:00+08:00">
+                2010-12-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法设计/" itemprop="url" rel="index">
+                    <span itemprop="name">算法设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>十二月的关键词是：做课题，可展曲面以及曲面逼近。事先申明这篇博客一点都不有趣没有可看性，而且还很长。</p>
+<p>整个十一月确实比较闲，导致我买了不少小说时评茶叶，加入茶学社什么的。29号范飞龙叫我去给老板装UG说了这么一件事，南京某电子所的一个研究员给老板发了一个UG的pat文件，是一张曲面，要裁剪一种不可形变的平面材料粘附到这张曲面上，请教曲面上的58个控制点在平面材料上的对应点。其实核心的问题就是找一张可展曲面来逼近他所给的曲面。我当时正好闲的发慌，也想多做点东西给毕业设计增加点分量，且当初找工作签约的时候问华为说我去公司也是做曲面逼近这一块的，就欣然前往老板家，把这个课题给承包下来了。</p>
+<p>十一月闲太久了，刚开始的时候完全没有进入状态。原先想当然的以为这是个很简单的东西。只要用UG在曲面上取一千多个点做样点，假设一个可展曲面的方程，求出点到曲面的距离，使所有样点到曲面距离的平方和最小的曲面即可，还以为用个最小二乘什么的就可以了。认真稍作分析就发现根本不是那么一回事，曲面的逼近和曲线的逼近全然是两个级别的问题。首先可展曲面的方程如何假定，如果用切线面的方程，那么准线方程用什么来假定，如果用多项式方程，那么阶数定多少，阶数高了不好算，低了又觉得太粗糙；其次，点到曲面的距离也不好刻画，就算写出显示表达式也非常复杂，完全不是最小二乘可以解决的，理论上可以看作是一个无约束的非线性最优化，但是表达式复杂不好求偏导，就算用数值解法都很麻烦。在图书馆搜索“可展曲面”只有《可展曲面的构造和插值研究》。2号把这本书过了一下，大致理解了作者的思路，但是他的方法主要是构造可展的Bezier曲面，插值要用到很多条件，我的情况不适用。继续在论文库和谷歌中搜索“Developable Surface”，“fit”，“approach”。找到几篇比较适用的，其中主要是在看《Developable Surface Fitting to Point Clouds》，这篇文章比较有趣，3号到7号都在琢磨里面的东西，其中用了不少数学方法，数学的基础太差了，花了不少时间。它的主要思想是从可展曲面的对偶表达式出发，将可展曲面看作是单参数的切平面簇的包络面，可以把切平面投影到射影空间中的一个点，一张可展曲面就变成射影空间中的一条曲线了，这样曲面的拟合就变成了曲线的拟合，问题就简单许多了。不过说起来简单，做起来还是很麻烦，射影空间是四维空间，结果不便直观显示，他给的曲面性质并不好，对应到射影空间后点散的比较开，因此先找了篇《Curve Reconstruction from Unorganized Points》，介绍了一种算法及其改进：运动最小二乘(moving least-squares)。可以使分散的点聚拢，但是他的理论大都基于二维平面的，而我的空间却是四维的，因此具体实现时麻烦的多，对每个样点先求四维中的局部回归超平面，旋转坐标，把所有的点投影到这个超平面上变成三维数据，再在三维中求局部回归超平面，旋转坐标，把所有的点投影到这个平面上变成二维数据，再在二维上做运动最小二乘，得到每个样点的新位置，再返回到三维再返回到四维，得到点后还要对聚拢后的点做组织化，把无序的点变成有序的 。这两个步骤的代码比较复杂，但是聚拢点云的代码，我是在自习教室里，先把步骤在纸张上写清楚，各个函数功能理清楚了才动手实现的，几乎没有错误。而相对简单的组织化我是直接动手写的，出了两个严重的错误，其中有一个是到23号才发现的，把<code>norm(b_last(i, :)-b_last(i-1, :))</code>写成<code>norm(b_last(i)-b_last(i-1))</code>。这前面的步骤每一步画出来的图都还比较理想，尤其是聚拢点云，看上去很漂亮，但是当14号我自信满满的画出曲面来的时候，得到的结果确实乱七八糟的，就别说拟合了，甚至都不能称为一张曲面。（蓝色是样点，乱七八糟的是曲面）</p>
+<p><img src="http://yangxixi-blog.qiniudn.com/fail-result.png" alt="fail-result"></p>
+<p>检查了一遍代码，结果还是一样，这里经历了比较痛苦的一周，因为翻来覆去的看整个数学过程都非常漂亮，代码检查了几次，关键部分肯定没有错误。终于在21号发现主要问题所在，理论是一回事，应用是另一回事，论文中的方法作者能有这么理想的效果是因为他找的例子都是相当弯曲，而我这个太平了，而我在做运动最小二乘的时候又没有注意保持点的相互之间的性质特征导致了误差其实是很大的，而我只是看到点的聚拢效果就得意忘形了。（左边是原来的点，右边是聚拢后的）</p>
+<p><img src="http://yangxixi-blog.qiniudn.com/moving-least-squares.png" alt="moving least-squares"></p>
+<p>因为射影空间是四维空间，因此拟合的结果不便直观显示，原来为了可视化，找了种四维数据转为三维数据的方法，原来以为是一一映射，但是16号才发现会丢失符号信息。</p>
+<p>而在组织化点的过程中要用到每个点的回归直线，在二维的运动最小二乘的过程中有计算过回归直线，但是组织化点是在四维空间，所以要把回归直线的方向作为返回值，带入二维到三维，三维到四维的函数中，用于组织化点时点与点之间位置的判断。直到22号我才发现，这些代码ComputNewPosition2D我是从ComputNewPosition3D拷贝过来然后只是简单的修改了一下维数，没发现2D情况下要少一次坐标变换。所以组织化点时，很多点顺序是不对的，故用四次多项式对四个维数做拟合时，方差很大。另一个错误是23号才找到，用弦长参数化，减少点后的点的间距应该比较平均，都比阀值少一点点的样子，但是我的结果第一个和最后一个居然相差近百倍，看了几遍代码愣是没发现，后来只好通过减少点的过程把点距作为返回值才得到正确的参数化，再回头看原来的代码才发现我把<code>norm(b_last(i, :)-b_last(i-1,:))</code>写成<code>norm(b_last(i)-b_last(i-1))</code>。22号凌晨00：36我找到第一个错误，得到四维各自的方差比较小的拟合多项式，但是曲面仍是乱的，我都觉得心力憔悴了，在笔记本上写下“做不下去了，累死人”但是洗脚准备睡觉的时候还是又翻出笔记本总结原因。（四个维上多项式逼近的效果，看上去还不错）<br><img src="http://yangxixi-blog.qiniudn.com/approach.png" alt="approach"><br>到24号凌晨00：53分找到第二个错误，但是曲面还是乱的，并且发现参数化对结果的影响是非常大的，而且用4次多项式拟合与用5次6次多项式拟合数据得到的曲面差异也非常大，这才认识到原因是我在做运动最小二乘时没有保持点的性质特征。找到了问题的关键后进度就很快了。24号再回头分析了那篇《Developable Surface Fitting to Point Clouds》，总结了对可展曲面的分类，对我的数据做了分析后得到两个比较小的特征值，一个是10的-6次方级，另一个是10的-4次方级。安理论上点云可用圆锥面来拟合，两个特征值对应的点就在圆锥的主轴上，这样，圆锥的方程就可以直接得到了。我又一次满怀希望用matlab画出图一看，想死的心都有了，画出的主轴居然是垂直于点云面的。非常痛苦了一整天，一直搞不明白哪里出了问题，理论翻来覆去的看觉得绝对正确，代码也找不到问题，25号晚上在自习教室发呆的时候灵机一动，想到一个验证方法，立刻回寝室一试，果然问题出在10的-4次方的那个特征值，不够小，不能视为0，现实中误差是很大的。只有一个特征值其实就够了，点的四个维数之间的性质我就有方程来保持了。25号晚，我在自习教室小心翼翼地把所有步骤与数据理了一遍，十点下自习，回寝室把过程实现了，当我像之前数百次那样点下matlab的evaluate键时。居然真的得到了比较理想的逼近曲面！我看了一下时间，12：59。这是最好的圣诞礼物，虽然来的晚了一点。（蓝色的是样点）</p>
+<p><img src="http://yangxixi-blog.qiniudn.com/final-result.png" alt="final-result"></p>
+<p>剩下的事情就很快了，26号求出控制点在曲面上的对应点，27号把曲面展开到平面上，最终结果就有了。</p>
+<p>在实践中才能快速成长。其实我刚刚听书这个课题时对可展曲面和曲面逼近一无所知，事实上29号范飞龙让我去给老板安装UG是我第一次听说这个软件。但是在做到过程中带着目的去学习，效率非常高。</p>
+<p>做自己感兴趣的觉得有意义的事情，研二的时候发过一篇论文，纯粹是为了评奖学金，虽然写论文那几周也很充实，学了不少东西，但做完就再也不想理那个东西。因为自己也知道那就是篇垃圾论文，虽然里面有几个证明自己还很得意，但其实搞出来的东西一点实际应用价值都没有，为了论文而论文。我希望我的论文是我研究的副产品而不是我研究的产品就是论文，一点成就感都没有。而今天这个东西是工业上遇到的问题，如果在实践中能得到很好的应用，才会让人去持续关注思考改进方法。</p>
+<p>24号我陷入困境的时候，想到重赏之下必有勇夫，我在日记本上鼓励自己：“把这个东西搞出来我就去找个女朋友”，想了想还是实际点，又加上“或者花一千块钱奖励自己”。元旦毛毛回厦门可以一起去买衣服了。<br>痛并快乐着。</p>
+<p>虽然讲出来很假，但是我现在确实觉得数学是非常有趣的。《牛逼顿的一生》里有这么一段：</p>
+<blockquote>
+<p>“牛顿老师的一生是天才的一生，战斗的一生，也是孤独的一生。一辈子没有朋友，也没有结过婚，很可能到死都是处男，关于牛顿是否处男的问题，由于篇幅过长，我将在另一篇文中论证。当然他肯定不会孤独，因为科学的世界里乐趣无限，快感连连。出乎世俗想象的是，科学其实远比任何娘们儿都风骚，玩科学比玩女人爽得多，得到一个成果所获得的高潮强烈而持久，不仅有快感，更有巨大的自我认同感，远胜于那几秒寒颤之后无边的空虚与落寞。所以陈景润其实是沉溺于美色不能自拔，身体弱架不住高潮过度被爽死了。 ”</p>
+</blockquote>
+<p>所以牛顿莱布尼茨哈代 爱多斯切比雪夫达芬奇柏拉图都孑然一身，当然我不想步他们后尘。</p>
+<p>说到搞科研，有很多人立刻会想到读博士，可是现在中国大学里大多读博士的人都是为了混文凭或者不知道自己可以干什么所以读博士，于是读博士也只是纠结于写论文发SCI，天天也就是看国外牛人的论文看看能不能跟在屁股后面拣一点别人落下的或者不要的面包屑，没意思，当然，牛逼的人还是有的，能够逆环境独立自主研究，像姜文说的那样“站着赚钱”，但是那样是要有强大的能力和精神力的，我是个很依赖环境的人，没有自信能成为这样的人。留着博士不读也是留条路，万一我以后做IT民工非常痛苦还可以回头读博士换种生活。而且我一想到万一读了博士，自己一个人住在山上的单人间，左右住的都是其他不认识的拖家带口的博士，我就感到万分孤独。</p>
+<p>说到这又觉得自己是不是太理想主义了，追求的东西太纯粹，前几天在李开复的微博上看到一句“不要让任何人告诉你：你的梦想不实际。梦想的目的不是为了实际，而是为了给你的人生带来意义和快乐。”我还清楚的记得小学的时候老师和我们解释理想和梦想的区别是理想是通过努力完全可以实现的，而梦想则近似于空想妄想。于是从小起我们所受的教育是：“我的理想是什么”标准答案是科学家，也可以是教师或者工程师。其实当年我说出科学家时，连什么是科学家都不知道，其实现在也不知道，隐约觉得是群穿白大褂摆弄五颜六色试管或者按钮的人。我现在找了份叫工程师的工作，不知道算不算实现了小时候的理想，尽管现在遍地都是工程师，卖保险的也叫财务工程师。然而，对99%的人，当年的理想现在活生生的变成了空想。美国人说“I have a dream” 说 “American dream”， 而我们似乎很少说梦想，说到梦似乎更多是白日梦。其实我觉得理想和梦想的区别应该在一个理字，理想是理性的选择，而梦想更多的是激情。理想就是如果我当初签约是去做嵌入式工程师，那么我的理想就是成为一个构架师，如果我签约去的是射频工程师，那我就要做通信方面的专家。但是梦想是不管工资多少职位高低我都要去搞飞机，只要组织上包吃包住包分配老婆，月工资三百我也干。</p>
+<p>其实我也是个没有梦想的人，趋炎附势的人，功利的人，只会说说而已，再过半个多小时就2011年了，大家元旦快乐。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/可展曲面/" rel="tag"># 可展曲面</a>
+          
+            <a href="/tags/逼近/" rel="tag"># 逼近</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2011/03/22/细分生成球面三角网格（matlab）/" rel="prev" title="细分生成球面三角网格（matlab）">
+                细分生成球面三角网格（matlab） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

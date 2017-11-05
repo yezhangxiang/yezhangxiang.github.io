@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="LeetCode,C++," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="周末女朋友不在家，打算做几题LeetCode的题目练练手，随机抽中Palindrome Partitioning，题目如下：  Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of">
+<meta name="keywords" content="LeetCode,C++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Palindrome Partitioning">
+<meta property="og:url" content="http://yezhangxiang.com/2014/07/28/Palindrome Partitioning/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="周末女朋友不在家，打算做几题LeetCode的题目练练手，随机抽中Palindrome Partitioning，题目如下：  Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Palindrome Partitioning">
+<meta name="twitter:description" content="周末女朋友不在家，打算做几题LeetCode的题目练练手，随机抽中Palindrome Partitioning，题目如下：  Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2014/07/28/Palindrome Partitioning/"/>
+
+
+
+
+
+  <title>Palindrome Partitioning | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2014/07/28/Palindrome Partitioning/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Palindrome Partitioning</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2014-07-28T01:09:00+08:00">
+                2014-07-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>周末女朋友不在家，打算做几题LeetCode的题目练练手，随机抽中<a href="https://oj.leetcode.com/problems/palindrome-partitioning/" target="_blank" rel="external">Palindrome Partitioning</a>，题目如下：</p>
+<blockquote>
+<p>Given a string s, partition s such that every substring of the partition is a palindrome.</p>
+<p>Return all possible palindrome partitioning of s.</p>
+<p>For example, given s = “aab”,<br>Return</p>
+<p>[<br>   　　[“aa”,”b”],<br>   　　[“a”,”a”,”b”]<br>]</p>
+</blockquote>
+<p>思路很简单，构建子串的树，用回溯法，遍历每个子串，若当前子串是回文，则递归遍历子节点</p>
+<p>Talk is cheap，show me the code.</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; partition(<span class="built_in">string</span> s) &#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; all_answer;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; answer;</div><div class="line">        backtracking(s, <span class="number">0</span>, all_answer, answer);</div><div class="line">        <span class="keyword">return</span> all_answer;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">print</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; all_answer)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span> it = all_answer.begin(); it != all_answer.end(); it++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">auto</span> it2 = it-&gt;begin(); it2 != it-&gt;end(); it2++)</div><div class="line">            &#123;</div><div class="line">                <span class="built_in">cout</span> &lt;&lt; *it2 &lt;&lt; <span class="string">" "</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="built_in">endl</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">is_palindrome</span><span class="params">(<span class="built_in">string</span> s)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">        <span class="built_in">string</span>::iterator it = s.begin();</div><div class="line">        <span class="built_in">string</span>::reverse_iterator it2 = s.rbegin();</div><div class="line">        <span class="keyword">while</span> (i &lt; s.length()/<span class="number">2</span> &amp;&amp; it != s.end())</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (*it != *it2)</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">            &#125;</div><div class="line">            ++i;</div><div class="line">            ++it;</div><div class="line">            ++it2;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">backtracking</span><span class="params">(<span class="built_in">string</span> s, <span class="keyword">unsigned</span> <span class="keyword">int</span> current, <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt;&gt; &amp;all_answer, <span class="built_in">vector</span>&lt;<span class="built_in">string</span>&gt; &amp;answer)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">if</span> (current == s.length())</div><div class="line">        &#123;</div><div class="line">            all_answer.push_back(answer);</div><div class="line">            <span class="keyword">return</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span></div><div class="line">        &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= s.length()-current; ++i)</div><div class="line">            &#123;</div><div class="line">                <span class="built_in">string</span> current_str = s.substr(current, i);</div><div class="line">                <span class="keyword">if</span> (is_palindrome(current_str))</div><div class="line">                &#123;</div><div class="line">                    answer.push_back(current_str);</div><div class="line">                    backtracking(s, current+i, all_answer, answer);</div><div class="line">                    answer.pop_back();  <span class="comment">//backtracking</span></div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>提交，显示Accepted。看到问题列表中还有<a href="https://oj.leetcode.com/problems/palindrome-partitioning-ii/" target="_blank" rel="external">Palindrome Partitioning II</a>，就想一鼓作气做完。题目如下：</p>
+<blockquote>
+<p>Given a string s, partition s such that every substring of the partition is a palindrome.</p>
+<p>Return the minimum cuts needed for a palindrome partitioning of s.</p>
+<p>For example, given s = “aab”,<br>Return 1 since the palindrome partitioning [“aa”,”b”] could be produced using 1 cut.</p>
+</blockquote>
+<p>乍一看比第一题还简单，但是明显测试用例会对时间复杂度做更高的要求，果然，直接改用第一题的方法，显示Time Limit Exceeded，通不过的测试用例是：</p>
+<pre><code>&quot;fifgbeajcacehiicccfecbfhhgfiiecdcjjffbghdidbhbdbfbfjccgbbdcjheccfbhafehieabbdfeigbiaggchaeghaijfbjhi&quot;
+</code></pre><p>这个字符串长度100，于是修改算法，观察上一张图，分割的次数其实就是树的层级，之前用的回溯法是深度遍历，如果只需要最小的分割次数，那么只需要按层级遍历，找到一种分割即可返回。利用队列实现层级遍历，修改代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCut_1</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</div><div class="line">        <span class="built_in">queue</span>&lt;node&gt; node_queue;</div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> current = <span class="number">0</span>;</div><div class="line">        node first_node = &#123;<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>&#125;;</div><div class="line">        node_queue.push(first_node);</div><div class="line">        <span class="keyword">while</span>(node_queue.size())</div><div class="line">        &#123;</div><div class="line">            node current_check = node_queue.front();</div><div class="line">            node_queue.pop();</div><div class="line">            <span class="built_in">string</span> current_substr = s.substr(current_check.curret_position, current_check.sub);</div><div class="line">            <span class="keyword">if</span> (is_palindrome(current_substr))</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">unsigned</span> <span class="keyword">int</span> new_current = current_check.curret_position+current_check.sub;</div><div class="line">                <span class="keyword">if</span> (new_current == s.length())</div><div class="line">                &#123;</div><div class="line">                    <span class="keyword">return</span> current_check.layer;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">else</span></div><div class="line">                &#123;</div><div class="line">                    <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = s.length()-new_current; i &gt;= <span class="number">1</span>; --i)</div><div class="line">                    &#123;</div><div class="line">                        node sub_node = &#123;new_current, i, current_check.layer+<span class="number">1</span>&#125;;</div><div class="line">                        node_queue.push(sub_node);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></div><div class="line"><span class="class">    &#123;</span></div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> curret_position;</div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> sub;</div><div class="line">        <span class="keyword">int</span> layer;</div><div class="line">    &#125;;</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">is_palindrome</span><span class="params">(<span class="built_in">string</span> s)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">        <span class="built_in">string</span>::iterator it = s.begin();</div><div class="line">        <span class="built_in">string</span>::reverse_iterator it2 = s.rbegin();</div><div class="line">        <span class="keyword">while</span> (i &lt; s.length()/<span class="number">2</span> &amp;&amp; it != s.end())</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (*it != *it2)</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">            &#125;</div><div class="line">            ++i;</div><div class="line">            ++it;</div><div class="line">            ++it2;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>但是这样仍然显示Time Limit Exceeded，因为在最坏情况下，这个算法还是要遍历大多数层级，而这个测试用例就是很少回文的情况。跑到41层的时候队列长度就已经超过100万了</p>
+<p>思考一下，我们需要的只是最小的分割次数，但是我之前的思路总是离不开树的遍历，其实是获取了具体的分割结果，付出极大的计算代价。类似之前做过的<a href="http://yezhangxiang.com/2012/05/29/%E8%A7%A3%E4%B8%80%E9%81%93%E9%A2%98/">解一道题</a>（两篇博客居然相隔两年，汗）只聚焦于分割次数，可以改用动态规划来做：</p>
+<p>令d[i]为s[0…i]的最小分割次数，s[0…i]可分割为s[0…j]和s[j+1…i]，若s[j+1…i]是回文，则d[i] = min(d[j]+1,d[i]).修改后代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCut_2</span><span class="params">(<span class="built_in">string</span> s)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= s.length();++i)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (is_palindrome(s.substr(<span class="number">0</span>, i)))</div><div class="line">            &#123;</div><div class="line">                dp.push_back(<span class="number">0</span>);</div><div class="line">                <span class="keyword">continue</span>;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span></div><div class="line">            &#123;</div><div class="line">                dp.push_back(i<span class="number">-1</span>);</div><div class="line">            &#125;</div><div class="line"></div><div class="line">            <span class="keyword">for</span> (<span class="keyword">unsigned</span> <span class="keyword">int</span> j = <span class="number">1</span>; j &lt; i; j++)</div><div class="line">            &#123;</div><div class="line">                <span class="built_in">string</span> current_substr = s.substr(j, i-j);</div><div class="line">                <span class="keyword">if</span> (is_palindrome(current_substr))</div><div class="line">                &#123;</div><div class="line">                    <span class="keyword">if</span> (dp[i<span class="number">-1</span>] &gt; dp[j<span class="number">-1</span>]+<span class="number">1</span>)</div><div class="line">                    &#123;</div><div class="line">                        dp[i<span class="number">-1</span>] = dp[j<span class="number">-1</span>]+<span class="number">1</span>;</div><div class="line">                    &#125; </div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[s.length()<span class="number">-1</span>];</div><div class="line">    &#125;</div><div class="line"><span class="keyword">private</span>:</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">is_palindrome</span><span class="params">(<span class="built_in">string</span> s)</span></span></div><div class="line"><span class="function">    </span>&#123;</div><div class="line">        <span class="keyword">unsigned</span> <span class="keyword">int</span> i = <span class="number">0</span>;</div><div class="line">        <span class="built_in">string</span>::iterator it = s.begin();</div><div class="line">        <span class="built_in">string</span>::reverse_iterator it2 = s.rbegin();</div><div class="line">        <span class="keyword">while</span> (i &lt; s.length()/<span class="number">2</span> &amp;&amp; it != s.end())</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">if</span> (*it != *it2)</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">            &#125;</div><div class="line">            ++i;</div><div class="line">            ++it;</div><div class="line">            ++it2;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>但是还是Time Limit Exceeded，但是这次通不过的测试用例是：</p>
+<pre><code>&quot;aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa&quot;
+</code></pre><p>字符串长度1462，搞不定，没思路了，看discussion里别人的方法，原来是不仅最小分割数做了动态规划，子串的回文判断也用了动态规划：</p>
+<p>用pal[i][j]记录子串s[i..j]是否是回文，根据pal[j+1][i-1]与s[i]==s[j]判断pal[j][i]是否是回文。修改代码如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">int</span> <span class="title">minCut</span><span class="params">(<span class="built_in">string</span> s)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span>(s.empty()) <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">        <span class="keyword">int</span> n = s.length();</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; pal(n,<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(n,<span class="literal">false</span>));</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; dp(n);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n;++i)</div><div class="line">        &#123;</div><div class="line">            dp[i] = i&gt;<span class="number">1</span> ? dp[i<span class="number">-1</span>]+<span class="number">1</span> : i;</div><div class="line">            pal[i][i] = <span class="literal">true</span>;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">if</span>(s[i]==s[j] &amp;&amp; (i-j&lt;<span class="number">2</span> || pal[j+<span class="number">1</span>][i<span class="number">-1</span>]))</div><div class="line">                &#123;</div><div class="line">                    pal[j][i]=<span class="literal">true</span>;</div><div class="line">                    <span class="keyword">if</span> (<span class="number">0</span> == j)</div><div class="line">                    &#123;</div><div class="line">                        dp[i] = <span class="number">0</span>;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (dp[j<span class="number">-1</span>]+<span class="number">1</span> &lt; dp[i])</div><div class="line">                    &#123;</div><div class="line">                        dp[i] = dp[j<span class="number">-1</span>]+<span class="number">1</span>;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[n<span class="number">-1</span>];</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>提交后终于Accepted，耗时244ms。</p>
+<p>做这题花费了一天时间，把树的遍历和动态规划也都再复习了一遍，获益匪浅。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+          
+            <a href="/tags/C/" rel="tag"># C++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2012/05/29/解一道题/" rel="next" title="解一道题">
+                <i class="fa fa-chevron-left"></i> 解一道题
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2014/08/16/wildcard matching通配符实现之递归/" rel="prev" title="wildcard matching通配符实现之递归">
+                wildcard matching通配符实现之递归 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

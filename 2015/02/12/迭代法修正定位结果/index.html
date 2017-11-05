@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="最小二乘,迭代法," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在上一篇博客中研究了用bayes方法修正定位结果，最近尝试了一下从数值解法的角度来看这个问题。 用Bayes方法的缺点实际中采集的数据，只有不到10%的数据有AGPS，本意是利用这10%的带AGPS的数据来训练转移概率矩阵$A$，再用以修正全部的定位结果，但是由贝叶斯定理: $$\begin{equation} P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)} \e">
+<meta name="keywords" content="最小二乘,迭代法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="迭代法修正定位结果">
+<meta property="og:url" content="http://yezhangxiang.com/2015/02/12/迭代法修正定位结果/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="在上一篇博客中研究了用bayes方法修正定位结果，最近尝试了一下从数值解法的角度来看这个问题。 用Bayes方法的缺点实际中采集的数据，只有不到10%的数据有AGPS，本意是利用这10%的带AGPS的数据来训练转移概率矩阵$A$，再用以修正全部的定位结果，但是由贝叶斯定理: $$\begin{equation} P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)} \e">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/transition-probability-both.png">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="迭代法修正定位结果">
+<meta name="twitter:description" content="在上一篇博客中研究了用bayes方法修正定位结果，最近尝试了一下从数值解法的角度来看这个问题。 用Bayes方法的缺点实际中采集的数据，只有不到10%的数据有AGPS，本意是利用这10%的带AGPS的数据来训练转移概率矩阵$A$，再用以修正全部的定位结果，但是由贝叶斯定理: $$\begin{equation} P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)} \e">
+<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/transition-probability-both.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2015/02/12/迭代法修正定位结果/"/>
+
+
+
+
+
+  <title>迭代法修正定位结果 | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2015/02/12/迭代法修正定位结果/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">迭代法修正定位结果</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-12T00:00:00+08:00">
+                2015-02-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法设计/" itemprop="url" rel="index">
+                    <span itemprop="name">算法设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在<a href="http://yezhangxiang.com/2015/02/06/Bayes%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E5%88%9D%E6%8E%A2/">上一篇博客</a>中研究了用bayes方法修正定位结果，最近尝试了一下从数值解法的角度来看这个问题。</p>
+<h1 id="用Bayes方法的缺点"><a href="#用Bayes方法的缺点" class="headerlink" title="用Bayes方法的缺点"></a>用Bayes方法的缺点</h1><p>实际中采集的数据，只有不到10%的数据有AGPS，本意是利用这10%的带AGPS的数据来训练转移概率矩阵$A$，再用以修正全部的定位结果，但是由贝叶斯定理:</p>
+<span>$$\begin{equation}
+P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)}
+\end{equation}$$</span><!-- Has MathJax -->
+<p>可以看到，求$P(A| B)$，有一个隐含的前提要求训练库和校正对象的$P(A),P(B)$分布是相同的，但是现实中带AGPS部分数据和非AGPS部分数据的分布相差可能非常大，比如室外AGPS的比例大于10%，而室内AGPS的比例就几乎为0.<br>举一个栗子，在上篇博客的例子上增加非AGPS部分，蓝色是AGPS部分数据，红色是非AGPS部分数据，两者有相同的转移概率（黑色箭头）<br><img src="http://yangxixi-blog.qiniudn.com/transition-probability-both.png" alt=""><br>由蓝色AGPS部分可以得到转移矩阵：</p>
+<span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{3}{7} &amp; \frac{3}{5}\\  %第一行元素
+    \frac{4}{7} &amp; \frac{2}{5}\\  %第二行元素
+  \end{array}
+\right]                 %右括号
+\cdot
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    70\\
+    150\\
+  \end{array}
+\right]                 %右括号
+ =
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    120\\
+    100\\
+  \end{array}
+\right]                 %右括号
+\end{equation}$$</span><!-- Has MathJax -->
+<span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{3}{7} &amp; \frac{3}{5}\\  %第一行元素
+    \frac{4}{7} &amp; \frac{2}{5}\\  %第二行元素
+  \end{array}
+\right]                 %右括号
+\cdot
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    700\\
+    100\\
+  \end{array}
+\right]                 %右括号
+ =
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    360\\
+    440\\
+  \end{array}
+\right]                 %右括号
+\end{equation}$$</span><!-- Has MathJax -->
+<p>这里系数矩阵$A$可计算得到校正概率矩阵$B$为：<br><span>$$\begin{equation}       %开始数学环境
+\left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{3}{7} &amp; \frac{3}{5}\\  %第一行元素
+    \frac{4}{7} &amp; \frac{2}{5}\\  %第二行元素
+  \end{array}
+\right]
+\Rightarrow
+\left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{1}{4} &amp; \frac{2}{5}\\  %第一行元素
+    \frac{3}{4} &amp; \frac{3}{5}\\  %第二行元素
+  \end{array}
+\right]
+\end{equation}$$</span><!-- Has MathJax --><br>就可以反求得真实GPS数据为：<br><span>$$\begin{equation}       %开始数学环境
+ \left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{1}{4} &amp; \frac{2}{5}\\  %第一行元素
+    \frac{3}{4} &amp; \frac{3}{5}\\  %第二行元素
+  \end{array}
+\right]
+\cdot
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    120\\
+    100\\
+  \end{array}
+\right]                 %右括号
+ =
+\left[                 %左括号
+  \begin{array}{c}
+    70\\
+    150\\
+  \end{array}
+\right]                 %右括号
+\end{equation}$$</span><!-- Has MathJax --></p>
+<span>$$\begin{equation}       %开始数学环境
+ \left[                 %左括号
+  \begin{array}{}   %该矩阵一共3列，每一列都居中放置
+    \frac{1}{4} &amp; \frac{2}{5}\\  %第一行元素
+    \frac{3}{4} &amp; \frac{3}{5}\\  %第二行元素
+  \end{array}
+\right]
+\cdot
+\left[                 %左括号
+  \begin{array}{c}   %该矩阵一共3列，每一列都居中放置
+    360\\
+    440\\
+  \end{array}
+\right]                 %右括号
+ =
+\left[                 %左括号
+  \begin{array}{c}
+    266\\
+    434\\
+  \end{array}
+\right]                 %右括号
+\neq 
+\left[                 %左括号
+  \begin{array}{c}
+    700\\
+    100\\
+  \end{array}
+\right]                 %右括号
+\end{equation}$$</span><!-- Has MathJax -->
+<p>考虑到AGPS部分只占10%，非AGPS部分的分布影响会非常大，看来还是要走回求线性方程组的路上来。</p>
+<h1 id="解方程法"><a href="#解方程法" class="headerlink" title="解方程法"></a>解方程法</h1><p>设$\mathbf{g}$为训练库中话务的真实分布，$\mathbf{l}$为训练库中话务定位后的结果，$\widetilde{\mathbf{g}}$为修正对象的真实分布，$\widetilde{\mathbf{l}}$为修正对象定位后的结果，两者有相同的话务定位偏差概率，即<br><span>$$\begin{equation}
+\left\{
+    \begin{array}{c}
+        A \cdot \mathbf{g}=\mathbf{l}\\
+        A \cdot \widetilde{\mathbf{g}}=\widetilde{\mathbf{l}}
+    \end{array}
+\right. 
+\end{equation}$$</span><!-- Has MathJax --><br>所以问题抽象为：已知$A$，$\mathbf{g}$，$\mathbf{l}$和$\widetilde{\mathbf{l}}$，求$\widetilde{\mathbf{g}}$。</p>
+<h2 id="直接求解"><a href="#直接求解" class="headerlink" title="直接求解"></a>直接求解</h2><p>上一篇日志尝试了，直接利用MATLAB求解这么大的方程组解不出来，而且直接求解明显也是不合适的，因为：</p>
+<ul>
+<li>$A \cdot \widetilde{\mathbf{g}}=\widetilde{\mathbf{l}}$这个等式不是严格成立的</li>
+<li>$A$ 矩阵是大型稀疏矩阵，而且是病态矩阵。<br>比如一个RNC的数据生成的$A$为62528×62528，非零元素不到0.3%，cond(A) = Inf.</li>
+</ul>
+<p>还是用QR法直接求解尝试一下，<a href="http://stanford.edu/class/ee263/notes/sle_matlab.pdf" target="_blank" rel="external">这里</a>提供了一种利用QR分解求解线性方程组的方法，但是要求矩阵的秩，用MATLAB自带的rank()函数，结果out of memory，<a href="http://www.math.sjsu.edu/singular/matrices/software/SJsingular/Doc/spnrank.pdf" target="_blank" rel="external">这里</a>提供了一种求解稀疏矩阵的秩的方法和代码，但是好像好不了太多，62528×62528，花了2个小时30G内存。<br>最后耗时近10个小时把结果算出来，果然大量的元素都是在$\pm 10^6$数量级的。</p>
+<h2 id="迭代法求解"><a href="#迭代法求解" class="headerlink" title="迭代法求解"></a>迭代法求解</h2><p>直接求解不合适，尝试用迭代解法我们的A矩阵是个稀疏矩阵，先尝试MATLAB自带的算法，help sparfun 可以找到不少迭代算法，都尝试了一遍：</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>full name</th>
+<th style="text-align:right">norm(A*x-b)</th>
+<th style="text-align:right">std(A*x-b)</th>
+<th style="text-align:right">time(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>bicg</td>
+<td>BiConjugateGradientsMethod.</td>
+<td style="text-align:right">171890.18</td>
+<td style="text-align:right">687.38</td>
+<td style="text-align:right">11.97</td>
+</tr>
+<tr>
+<td>bicgstab</td>
+<td>BiConjugateGradientsStabilizedMethod.</td>
+<td style="text-align:right">160256.92</td>
+<td style="text-align:right">640.85</td>
+<td style="text-align:right">10.67</td>
+</tr>
+<tr>
+<td>bicgstabl</td>
+<td>BiCGStab(l)Method.</td>
+<td style="text-align:right">171890.18</td>
+<td style="text-align:right">687.38</td>
+<td style="text-align:right">11.93</td>
+</tr>
+<tr>
+<td>tfqmr</td>
+<td>Transpose-FreeQMRMethod.</td>
+<td style="text-align:right">152420.71</td>
+<td style="text-align:right">605.59</td>
+<td style="text-align:right">11.06</td>
+</tr>
+<tr>
+<td>qmr</td>
+<td>Quasi-MinimalResidualMethod.</td>
+<td style="text-align:right">157463.2</td>
+<td style="text-align:right">616.31</td>
+<td style="text-align:right">11.43</td>
+</tr>
+<tr>
+<td>lsqr</td>
+<td>LSQRMethod.</td>
+<td style="text-align:right">63252.62</td>
+<td style="text-align:right">250.25</td>
+<td style="text-align:right">11.26</td>
+</tr>
+<tr>
+<td>gmres</td>
+<td>GeneralizedMinimumResidualMethod.</td>
+<td style="text-align:right">148389.87</td>
+<td style="text-align:right">583.49</td>
+<td style="text-align:right">11.05</td>
+</tr>
+<tr>
+<td>cgs</td>
+<td>ConjugateGradientsSquaredMethod.</td>
+<td style="text-align:right">160940.36</td>
+<td style="text-align:right">643.59</td>
+<td style="text-align:right">10.47</td>
+</tr>
+<tr>
+<td>lsqr_enhanced</td>
+<td></td>
+<td style="text-align:right">28038.39</td>
+<td style="text-align:right">111.28</td>
+<td style="text-align:right">12.17</td>
+</tr>
+<tr>
+<td>qr</td>
+<td></td>
+<td style="text-align:right">8646.7</td>
+<td style="text-align:right">34.29</td>
+<td style="text-align:right">34363.05</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到lsqr有明显优势，修改lsqr默认的初始值为$\widetilde{\mathbf{l}}$，且修改默认的迭代次数等默认参数可进一步减少误差（lsqr_enhanced）<a href="http://web.stanford.edu/group/SOL/software/lsqr/" target="_blank" rel="external">这个网站</a>提供了lsqr的论文和各种语言的代码（其实这个网站还提供了许多其他主流的稀疏矩阵的线性方程组或最小二乘的算法，是个宝库啊，不过要注意代码的license）。</p>
+<p>但是直接用解方程的方法都有一个严重问题，得到的$\widetilde{\mathbf{g}}$有非零元素，这不符合物理意义。</p>
+<h1 id="最小二乘法"><a href="#最小二乘法" class="headerlink" title="最小二乘法"></a>最小二乘法</h1><p>前面的迭代解法中lsqr有明显优势，受此启发，模型应该修改为求解非负最小二乘问题：</p>
+<p>$$\min_{\widetilde{\mathbf{g}}}\left | A  \cdot \widetilde{\mathbf{g}} -\widetilde{\mathbf{l}} \right |_2^2 \ \  where \ \  \widetilde{\mathbf{g}} \geq 0$$</p>
+<p>以$l$为初始值，采用迭代算法，找到下降方向，使得每次迭代范数变小，迭代求解的过程即修正定位结果的过程。</p>
+<p>现在问题来了，该选用什么合适的算法，留着下次再写吧。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/最小二乘/" rel="tag"># 最小二乘</a>
+          
+            <a href="/tags/迭代法/" rel="tag"># 迭代法</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/06/Bayes机器学习初探/" rel="next" title="Bayes机器学习初探">
+                <i class="fa fa-chevron-left"></i> Bayes机器学习初探
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/02/25/整理求解非负最小二乘的算法/" rel="prev" title="整理求解非负最小二乘的算法">
+                整理求解非负最小二乘的算法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#用Bayes方法的缺点"><span class="nav-number">1.</span> <span class="nav-text">用Bayes方法的缺点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解方程法"><span class="nav-number">2.</span> <span class="nav-text">解方程法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#直接求解"><span class="nav-number">2.1.</span> <span class="nav-text">直接求解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代法求解"><span class="nav-number">2.2.</span> <span class="nav-text">迭代法求解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#最小二乘法"><span class="nav-number">3.</span> <span class="nav-text">最小二乘法</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Algorithm,最小二乘," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="上一篇日志把问题归结为求解非负最小二乘问题：$$\min_{\widetilde{\mathbf{g}}}\left | A  \cdot \widetilde{\mathbf{g}} -\widetilde{\mathbf{l}} \right |_2^2 \ \  where \ \  \widetilde{\mathbf{g}} \geq 0$$其中$A$是大型稀疏矩阵，且为病态矩阵。 MA">
+<meta name="keywords" content="Algorithm,最小二乘">
+<meta property="og:type" content="article">
+<meta property="og:title" content="整理求解非负最小二乘的算法">
+<meta property="og:url" content="http://yezhangxiang.com/2015/02/25/整理求解非负最小二乘的算法/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="上一篇日志把问题归结为求解非负最小二乘问题：$$\min_{\widetilde{\mathbf{g}}}\left | A  \cdot \widetilde{\mathbf{g}} -\widetilde{\mathbf{l}} \right |_2^2 \ \  where \ \  \widetilde{\mathbf{g}} \geq 0$$其中$A$是大型稀疏矩阵，且为病态矩阵。 MA">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="整理求解非负最小二乘的算法">
+<meta name="twitter:description" content="上一篇日志把问题归结为求解非负最小二乘问题：$$\min_{\widetilde{\mathbf{g}}}\left | A  \cdot \widetilde{\mathbf{g}} -\widetilde{\mathbf{l}} \right |_2^2 \ \  where \ \  \widetilde{\mathbf{g}} \geq 0$$其中$A$是大型稀疏矩阵，且为病态矩阵。 MA">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2015/02/25/整理求解非负最小二乘的算法/"/>
+
+
+
+
+
+  <title>整理求解非负最小二乘的算法 | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2015/02/25/整理求解非负最小二乘的算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">整理求解非负最小二乘的算法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-25T00:00:00+08:00">
+                2015-02-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/资料整理/" itemprop="url" rel="index">
+                    <span itemprop="name">资料整理</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>上一篇日志把问题归结为求解非负最小二乘问题：<br>$$\min_{\widetilde{\mathbf{g}}}\left | A  \cdot \widetilde{\mathbf{g}} -\widetilde{\mathbf{l}} \right |_2^2 \ \  where \ \  \widetilde{\mathbf{g}} \geq 0$$<br>其中$A$是大型稀疏矩阵，且为病态矩阵。</p>
+<p>MATLAB自带lsqlin和lsqnonneg，但是这两个函数不是针对稀疏矩阵的，尝试了一下</p>
+<table>
+<thead>
+<tr>
+<th>algorithm</th>
+<th>norm(A*x-b)</th>
+<th>std(A*x-b)</th>
+<th>time(s)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lsqr</td>
+<td>63252.62</td>
+<td>250.25</td>
+<td>11.26</td>
+</tr>
+<tr>
+<td>lsqlin</td>
+<td>168143.81</td>
+<td>672.21</td>
+<td>398.19</td>
+</tr>
+<tr>
+<td>lsqnonneg</td>
+<td>-</td>
+<td>-</td>
+<td>>3day</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>lsqlin 用了200G内存迭代2次就终止了，结果和初始值相差不大，效果不好；</li>
+<li>lsqnonneg 耗时3天仍没有跑出结果，放弃了。</li>
+</ul>
+<p>找到一篇文章<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.157.9203&amp;rep=rep1&amp;type=pdf" target="_blank" rel="external">Nonnegativity constraints in numerical analysis</a>整理了大部分非负最小二乘法的算法：</p>
+<table>
+<thead>
+<tr>
+<th>Active Set Methods</th>
+<th>Iterative Approaches</th>
+<th>Other Methods</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lsqnonneg in Matlab</td>
+<td>Projected Quasi-Newton NNLS</td>
+<td>Interior Point Method</td>
+</tr>
+<tr>
+<td>ro and Jong’s Fast NNLS</td>
+<td>Projected Landweber method</td>
+<td>Principal Block Pivoting method</td>
+</tr>
+<tr>
+<td>ast Combinatorial NNLS</td>
+<td>Sequential Coordinate-wise Alg</td>
+<td></td>
+<td></td>
+<td>.</td>
+</tr>
+</tbody>
+</table>
+<p>除此之外，还早到一篇很新的论文2014年的，看摘要感觉也很适合我们的场景：<a href="http://arxiv.org/pdf/1205.0953.pdf" target="_blank" rel="external">Non-negative least squares for high-dimensional linear models: consistency and sparse recovery without regularization</a>有时间也可以考虑尝试。</p>
+<p>Nonnegativity constraints in numerical analysis 也解释了lsqnonneg算法不适用大型矩阵的原因：</p>
+<blockquote>
+<p>However, when applied in a straightforward manner to large scale NNLS problems, this algorithm’s performance is found to be unacceptably slow owing to the need to perform the equivalent of a full pseudo-inverse calculation for each observation vector. </p>
+</blockquote>
+<p>如果需要用lsqnonneg采用的算法，<a href="http://cran.r-project.org/web/packages/nnls/" target="_blank" rel="external">这里</a>提供了The Lawson-Hanson algorithm for non-negative least squares算法的实现dll。<br>对lsqnonneg 有一种改进的方法，<a href="http://www.researchgate.net/profile/Rasmus_Bro/publication/230554373_A_fast_non-negativity-constrained_least_squares_algorithm/links/09e41501a40da0224e000000.pdf" target="_blank" rel="external">A fast non-negativity-constrained least squares algorithm</a>，更适用于大型矩阵，但是这仍是一种active set methods，在Nonnegativity constraints in numerical analysis 解释说这些算法对病态矩阵效果都不好</p>
+<blockquote>
+<p>However, all these active set methods still depend on the normal equations, rendering them infeasible for ill-conditioned. </p>
+</blockquote>
+<p>书中的Iterative Approaches方法可能更适合我们的场景，但是论文看不懂;Other Methods中的<a href="http://arxiv.org/abs/cs/0408029" target="_blank" rel="external">Principal block pivoting method</a>似乎更适合我们的场景</p>
+<blockquote>
+<p>the authors gave a block principal pivoting algorithm for large and sparse NNLS.</p>
+</blockquote>
+<p>书中也提供了<a href="http://plato.asu.edu/sub/nonlsq.html" target="_blank" rel="external">一个网址</a>整理了大多数的最小二乘实现(这个网址其实还整理了带限制条件和不带限制条件的最优化方法等等的算法实现)，利用Principal block pivoting method对应的<a href="http://www.jasoncantarella.com/wordpress/software/tsnnls/" target="_blank" rel="external">TSNNLS</a>，我下载的是<a href="http://www.jasoncantarella.com/downloads/libtsnnls-2.3.3.tar.gz" target="_blank" rel="external">tsnnls 2.3.3 distribution</a>.</p>
+<p>根据win32下的BUILDING.txt下载<a href="http://www.netlib.org/clapack/CLAPACK-3.1.1-VisualStudio.zip" target="_blank" rel="external">CLAPACK</a></p>
+<blockquote>
+<p>You’ll need:<br>BLAS_nowrap.lib<br>clapack_nowrap.lib<br>libf2c.lib<br>for the release build,<br>BLASd_nowrap.lib<br>clapackd_nowrap.lib<br>libf2cd.lib<br>for the debug build.</p>
+</blockquote>
+<p>但是直接运行win32文件夹下的sln文件后，运行还是会有一些问题：</p>
+<ul>
+<li>要注释掉一些include不存在的文件</li>
+<li>工程中包含了多个测试文件，每个测试文件都是main函数，删掉多余的test文件</li>
+<li>有些lib文件要remove后重新add</li>
+</ul>
+<p>工程才能成功运行。但是把这个代码运用在我们的数据时出现了问题，数据量太大了，我爸win32的工程改成x64，但仍然有问题，矩阵大小为62528*62528=3.9098e+09，超出了int型的上限2^31=2.1475e+09，其实用unsigned int就可以了，为了通用我改成__int64，这里有个点要注意</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">int row = 62528;</div><div class="line">int col = 62528;</div><div class="line">__int64 n =  row * col;</div></pre></td></tr></table></figure>
+<p>这样得到的n还是会溢出的，要先把row或者col转化为__int64.但是仍然有问题，有个递归超出栈的限制了，尝试解小一些的方程，找了个13000左右的A，结果还是失败，认真看了一下论文，发现这个算法要求A要满秩，郁闷了。在网上找的时候好像说这个算法是Mathematica里用到的，我挺怀疑，反正在官网没找到这个算法，而且这个算法说自己适用于大型稀疏矩阵，可是却又要求矩阵满秩，这比较难吧？在这个代码上花了大半天的时间，教训是还是要先看清楚文档再搞代码。</p>
+<p>再回头看迭代解法，在<a href="http://www.mathworks.com/matlabcentral/fileexchange/35104-lbfgsb--l-bfgs-b--mex-wrapper" target="_blank" rel="external">MATLAB的论坛</a>上找到了 <a href="http://users.iems.northwestern.edu/~nocedal/PDFfiles/limited.pdf" target="_blank" rel="external">LBFGSB</a>的一个matlab的封装，但是封装的是Fortran的代码，我没有Fortran的编译器，还好作者提供了<a href="https://github.com/stephenbeckr/L-BFGS-B-C" target="_blank" rel="external">C的版本的封装</a>，在代码example_NNLS.m的注释中还给出了许多其他主流的非负最小二乘算法的MATLAB实现地址，而且根据作者的经验，在矩阵非常大且稀疏的时候这个算法是效果最好的</p>
+<blockquote>
+<p>% The best codes handle N = 20,000 as long as the matrix is very sparse.</p>
+</blockquote>
+<p>这个算法的耗时确实很少，13000*13000的矩阵，100次迭代已经基本收敛，耗时只要15s，内存消耗也不大，300M左右。<br>找到了合适的算法，但是最后用于修正定位的结果却令人很失望，修正后的结果明显不合理，分析了一下，主要应该还是因为$A  \cdot \widetilde{\mathbf{g}} =\widetilde{\mathbf{l}}$其实并不成立，而$A$又非常病态，用解方程的方法带来的误差反而大于修成的增益。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+            <a href="/tags/最小二乘/" rel="tag"># 最小二乘</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/02/12/迭代法修正定位结果/" rel="next" title="迭代法修正定位结果">
+                <i class="fa fa-chevron-left"></i> 迭代法修正定位结果
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/03/05/利用delaunay三角剖分定义基站间层级/" rel="prev" title="利用delaunay三角剖分定义基站间层级">
+                利用delaunay三角剖分定义基站间层级 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

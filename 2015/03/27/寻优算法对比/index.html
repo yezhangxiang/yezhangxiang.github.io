@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Algorithm,Optimization," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="不同的寻优算法肯定适合不同的场景，最近针对网络优化问题尝试了几种主流的寻优算法。 问题描述如下图，某块区域内有n个基站，每个小区的参数（功率，天线方位角，天线下倾角）有一定的调整范围，求如何调整参数，使得该区域的信号覆盖达到最优。这是一个很典型的NP问题。该问题有以下特点：  维度高往往一片优化区域内有几百上千个小区，每个小区有多个参数可调，寻优维度上千。 维度相关性随距离增加快速下降共站小区之前">
+<meta name="keywords" content="Algorithm,Optimization">
+<meta property="og:type" content="article">
+<meta property="og:title" content="寻优算法对比">
+<meta property="og:url" content="http://yezhangxiang.com/2015/03/27/寻优算法对比/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="不同的寻优算法肯定适合不同的场景，最近针对网络优化问题尝试了几种主流的寻优算法。 问题描述如下图，某块区域内有n个基站，每个小区的参数（功率，天线方位角，天线下倾角）有一定的调整范围，求如何调整参数，使得该区域的信号覆盖达到最优。这是一个很典型的NP问题。该问题有以下特点：  维度高往往一片优化区域内有几百上千个小区，每个小区有多个参数可调，寻优维度上千。 维度相关性随距离增加快速下降共站小区之前">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/sites.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/GTS_step1.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/GTS_step2.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/complexity_example.png">
+<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/Rastrigin.png">
+<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="寻优算法对比">
+<meta name="twitter:description" content="不同的寻优算法肯定适合不同的场景，最近针对网络优化问题尝试了几种主流的寻优算法。 问题描述如下图，某块区域内有n个基站，每个小区的参数（功率，天线方位角，天线下倾角）有一定的调整范围，求如何调整参数，使得该区域的信号覆盖达到最优。这是一个很典型的NP问题。该问题有以下特点：  维度高往往一片优化区域内有几百上千个小区，每个小区有多个参数可调，寻优维度上千。 维度相关性随距离增加快速下降共站小区之前">
+<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/sites.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2015/03/27/寻优算法对比/"/>
+
+
+
+
+
+  <title>寻优算法对比 | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2015/03/27/寻优算法对比/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">寻优算法对比</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-03-27T00:00:00+08:00">
+                2015-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法设计/" itemprop="url" rel="index">
+                    <span itemprop="name">算法设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>不同的寻优算法肯定适合不同的场景，最近针对网络优化问题尝试了几种主流的寻优算法。</p>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>如下图，某块区域内有n个基站，每个小区的参数（功率，天线方位角，天线下倾角）有一定的调整范围，求如何调整参数，使得该区域的信号覆盖达到最优。<br><img src="http://yangxixi-blog.qiniudn.com/sites.png" alt=""><br>这是一个很典型的NP问题。该问题有以下特点：</p>
+<ol>
+<li>维度高<br>往往一片优化区域内有几百上千个小区，每个小区有多个参数可调，寻优维度上千。</li>
+<li>维度相关性随距离增加快速下降<br>共站小区之前的关系比较紧密，而相隔两层以上的小区基本没什么影响，比如上图左上角的小区调整对右下角的小区的覆盖基本没有什么影响。</li>
+</ol>
+<h1 id="小区分组"><a href="#小区分组" class="headerlink" title="小区分组"></a>小区分组</h1><p>直接寻优维度太高，先进行降维处理，依次把相关性强的几个维度挑选出来寻优。对这个问题，就是把小区分为若干组，每次固定其他小区参数不变，只调整一组小区的参数。<br>若优化区域有n个栅格，m个小区，可以把一个小区看作是一个维度为n的点，分组问题就化简为对m个维度为n的点做聚类算法。</p>
+<h1 id="寻优算法"><a href="#寻优算法" class="headerlink" title="寻优算法"></a>寻优算法</h1><p>主要尝试了一下几种算法：</p>
+<h2 id="GTS-网格禁忌算法"><a href="#GTS-网格禁忌算法" class="headerlink" title="GTS 网格禁忌算法"></a>GTS 网格禁忌算法</h2><p>其实就是<a href="http://en.wikipedia.org/wiki/Tabu_search" target="_blank" rel="external">禁忌算法</a>寻找领域的过程用了网格法，以下以2维为例子介绍一下网格法:</p>
+<ol>
+<li>以原始参数为初始节点，向8个方向搜索（如果是n维，就是向n维空间中的单位体的每个角和面的方向），将每个面的最大值加入禁忌表；<br><img src="http://yangxixi-blog.qiniudn.com/GTS_step1.png" alt=""></li>
+<li>以第一步8个方向最优值中不在禁忌表中的最大值作为下一次搜索的起点，向8个方向搜索。<br><img src="http://yangxixi-blog.qiniudn.com/GTS_step2.png" alt=""></li>
+<li>若8个方向的最优值都在禁忌表中，停止搜索。</li>
+</ol>
+<h2 id="GA-遗传算法"><a href="#GA-遗传算法" class="headerlink" title="GA 遗传算法"></a>GA 遗传算法</h2><p>直接使用matlab自带的ga函数，所有参数使用的也都是默认值。</p>
+<h2 id="GPSO-遗传粒子群算法"><a href="#GPSO-遗传粒子群算法" class="headerlink" title="GPSO 遗传粒子群算法"></a>GPSO 遗传粒子群算法</h2><p>先是实现了普通的粒子群算法，但是我们的寻优空间是离散的，于是每次迭代粒子后，把粒子离散到最近的离散点上，但是这样的粒子群算法效果和遗传算法差不多，收敛很慢。于是改用了这种离散的粒子群算法：<a href="http://www.cqvip.com/qk/97969A/201205/41938173.html" target="_blank" rel="external">一种求解离散优化问题的粒子群算法</a>，它的思想是：把每个粒子往最优位置移动的方式改为，直接把粒子的某些维度的值赋值为最优位置的值。</p>
+<h1 id="结果对比"><a href="#结果对比" class="headerlink" title="结果对比"></a>结果对比</h1><p>取2小区一组，4小区一组，6小区一组，8小区一组，11小区一组，分别用GTS， GPSO， GA三种算法，统计了fitness的增加量，计算fitness的次数和运行时间，对2小区一组还尝试了遍历（traverse）作为对比：</p>
+<p><strong>fitness增加量</strong></p>
+<table>
+<thead>
+<tr>
+<th>groupSize</th>
+<th>GTS</th>
+<th>GPSO</th>
+<th>GA</th>
+<th>traverse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>6.68%</td>
+<td>6.78%</td>
+<td>6.90%</td>
+<td>6.94%</td>
+</tr>
+<tr>
+<td>4</td>
+<td>6.65%</td>
+<td>6.87%</td>
+<td>6.95%</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>6.96%</td>
+<td>6.91%</td>
+<td>6.88%</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>6.72%</td>
+<td>6.72%</td>
+<td>6.73%</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>6.27%</td>
+<td>6.16%</td>
+<td>6.27%</td>
+</tr>
+</tbody>
+</table>
+<p><strong>计算fitness次数</strong></p>
+<table>
+<thead>
+<tr>
+<th>groupSize</th>
+<th>GTS</th>
+<th>GPSO</th>
+<th>GA</th>
+<th>traverse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>3228</td>
+<td>2895</td>
+<td>11483</td>
+<td>559691</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5800</td>
+<td>3506</td>
+<td>28734</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>1713</td>
+<td>1461</td>
+<td>27583</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>3668</td>
+<td>812</td>
+<td>19472</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>3098</td>
+<td>1458</td>
+<td>14674</td>
+</tr>
+</tbody>
+</table>
+<p><strong>计算时间(单位：s)</strong></p>
+<table>
+<thead>
+<tr>
+<th>groupSize</th>
+<th>GTS</th>
+<th>GPSO</th>
+<th>GA</th>
+<th>traverse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>72.82</td>
+<td>59.94</td>
+<td>274.02</td>
+<td>11668</td>
+</tr>
+<tr>
+<td>4</td>
+<td>176.81</td>
+<td>119.15</td>
+<td>902.84</td>
+<td></td>
+</tr>
+<tr>
+<td>6</td>
+<td>55.86</td>
+<td>46.89</td>
+<td>911.54</td>
+<td></td>
+</tr>
+<tr>
+<td>8</td>
+<td>184.61</td>
+<td>40.82</td>
+<td>983.45</td>
+<td></td>
+</tr>
+<tr>
+<td>11</td>
+<td>156.2</td>
+<td>73.37</td>
+<td>722.05</td>
+</tr>
+</tbody>
+</table>
+<p>#结果分析</p>
+<p>结果挺令人意外，增加每组小区数应该增大了解空间的可能，但事实上小区分组没有起到什么效果，适应度几乎没有什么变化。简陋的GTS和GPSO反而在效率和效果上都不错，这应该是因为我们的寻优空间是比较简单的，往往是单凸包或者是双凸包，如下图<br><img src="http://yangxixi-blog.qiniudn.com/complexity_example.png" alt=""><br>而不是像Rastrigin函数（如下图）很难找到最优解<br><img src="http://yangxixi-blog.qiniudn.com/Rastrigin.png" alt=""><br>所以用一些简单的寻优方式效果差不多，效率还更有优势。想要达到更优的效果，可以每组小区寻优采用寻优能力相对弱但是收敛快的算法，但增加迭代次数（所有组寻优完成后再寻优一次）。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          
+            <a href="/tags/Optimization/" rel="tag"># Optimization</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/03/23/Discrete Optimization学习笔记（1）/" rel="next" title="Discrete Optimization学习笔记（1）">
+                <i class="fa fa-chevron-left"></i> Discrete Optimization学习笔记（1）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2015/04/03/Discrete Optimization学习笔记（2）/" rel="prev" title="Discrete Optimization学习笔记（2）">
+                Discrete Optimization学习笔记（2） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">37</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#问题描述"><span class="nav-number">1.</span> <span class="nav-text">问题描述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小区分组"><span class="nav-number">2.</span> <span class="nav-text">小区分组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#寻优算法"><span class="nav-number">3.</span> <span class="nav-text">寻优算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GTS-网格禁忌算法"><span class="nav-number">3.1.</span> <span class="nav-text">GTS 网格禁忌算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GA-遗传算法"><span class="nav-number">3.2.</span> <span class="nav-text">GA 遗传算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GPSO-遗传粒子群算法"><span class="nav-number">3.3.</span> <span class="nav-text">GPSO 遗传粒子群算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结果对比"><span class="nav-number">4.</span> <span class="nav-text">结果对比</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
