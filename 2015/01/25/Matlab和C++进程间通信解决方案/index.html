@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="老大让尝试一个算法预言，之前我们的算法验证都是基于某工具平台，我司的工具平台改起来真心麻烦，大量的人力都花在原型工具的测试上了，之前做硬件加速的时候自己也已经用C++实现了核心的计算部分（下图中褐色部分）。于是考虑是不是基于matlab搭建一个原型工具平台，利用matlab强大的图形功能和算法库，这样大家做一些算法验证要方便很多。 也就是用matlab实现蓝色部分：  最初想到的实现方案是把C++">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/flow-chart-with-hardware.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/flow-chart-with-hardware.png">
+<meta property="og:updated_time" content="2020-06-27T03:06:16.944Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matlab和C++进程间通信解决方案">
 <meta name="twitter:description" content="老大让尝试一个算法预言，之前我们的算法验证都是基于某工具平台，我司的工具平台改起来真心麻烦，大量的人力都花在原型工具的测试上了，之前做硬件加速的时候自己也已经用C++实现了核心的计算部分（下图中褐色部分）。于是考虑是不是基于matlab搭建一个原型工具平台，利用matlab强大的图形功能和算法库，这样大家做一些算法验证要方便很多。 也就是用matlab实现蓝色部分：  最初想到的实现方案是把C++">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/flow-chart-with-hardware.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/flow-chart-with-hardware.png">
 
 
 
@@ -326,7 +326,7 @@
       
         <p>老大让尝试一个算法预言，之前我们的算法验证都是基于某工具平台，我司的工具平台改起来真心麻烦，大量的人力都花在原型工具的测试上了，之前做硬件加速的时候自己也已经用C++实现了核心的计算部分（下图中褐色部分）。于是考虑是不是基于matlab搭建一个原型工具平台，利用matlab强大的图形功能和算法库，这样大家做一些算法验证要方便很多。</p>
 <p>也就是用matlab实现蓝色部分：</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/flow-chart-with-hardware.png" alt=""></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/flow-chart-with-hardware.png" alt=""></p>
 <p>最初想到的实现方案是把C++代码打包成dll让matlab调用，但是好像接口必须是mexFuntion，但是原来的C++代码有好几个接口函数，当然一个变通的方案是设置maxFunction的第一个参数来制定mexFunction实现某个接口功能，但是这样还是有问题，原来的数据都是在C++进程中保存的，现在如果变成dll调用，必须吧matlab中保存的数据传给dll来使用，感觉很麻烦，而且效率可能是个问题。</p>
 <p>Google了一下，发现matlab自带<a href="http://cn.mathworks.com/help/instrument/using-tcpip-server-sockets.html;jsessionid=13807c434c59aabbae657ef72758" target="_blank" rel="external">内存映射文件</a>功能和<a href="http://cn.mathworks.com/help/matlab/ref/memmapfile.html" target="_blank" rel="external">socket</a>功能，也很方便，那不如就直接采用原来的实现方案：消息用socket交互，大量的数据就保存为内存映射文件到本地，再通过socket发送路径来交互。这样原来的C++代码就可以完全不用改了。</p>
 <p>但是还是有个问题，之前的socket发送的消息我是这么设计的：</p>
@@ -509,7 +509,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

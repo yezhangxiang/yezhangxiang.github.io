@@ -87,17 +87,17 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="在很多场景中都会用到基站的层级的概念，比如邻区规划，频点规划，扰码规划等等，尤其是第一层邻区的概念，但是这概念比较主观，比如下面随机生成的30个站点，那些基站之间是第一层邻层基站，也许不同的人会有不同的结果。之前的算法是仿照人工选择的方式，在两个站点之间画一个椭圆，如果椭圆内没有其他站点，就是第一层基站，如下图如果椭圆内有n个站点，那就是第n+1层基站，如下图，两个蓝色基站互为第二层基站这个算法会">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/sites.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/old.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/neighbor2.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/neighbor1.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/voronoi.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/voronoi_bisection.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/sites.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/old.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/neighbor2.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/neighbor1.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/voronoi.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/voronoi_bisection.png">
+<meta property="og:updated_time" content="2020-06-27T03:40:47.339Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用delaunay三角剖分定义基站间层级">
 <meta name="twitter:description" content="在很多场景中都会用到基站的层级的概念，比如邻区规划，频点规划，扰码规划等等，尤其是第一层邻区的概念，但是这概念比较主观，比如下面随机生成的30个站点，那些基站之间是第一层邻层基站，也许不同的人会有不同的结果。之前的算法是仿照人工选择的方式，在两个站点之间画一个椭圆，如果椭圆内没有其他站点，就是第一层基站，如下图如果椭圆内有n个站点，那就是第n+1层基站，如下图，两个蓝色基站互为第二层基站这个算法会">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/sites.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/sites.png">
 
 
 
@@ -329,12 +329,12 @@
       
 
       
-        <p>在很多场景中都会用到基站的层级的概念，比如邻区规划，频点规划，扰码规划等等，尤其是第一层邻区的概念，但是这概念比较主观，比如下面随机生成的30个站点，那些基站之间是第一层邻层基站，也许不同的人会有不同的结果。<br><img src="http://yangxixi-blog.qiniudn.com/sites.png" alt=""><br>之前的算法是仿照人工选择的方式，在两个站点之间画一个椭圆，如果椭圆内没有其他站点，就是第一层基站，如下图<br><img src="http://yangxixi-blog.qiniudn.com/old.png" alt=""><br>如果椭圆内有n个站点，那就是第n+1层基站，如下图，两个蓝色基站互为第二层基站<br><img src="http://yangxixi-blog.qiniudn.com/neighbor2.png" alt=""><br>这个算法会导致一些很相似的场景，但是结果完全不同，比如下面这个场景，粉色站点位置只偏差了一点点，两个蓝色站点就从第二层基站变成第一层基站了<br><img src="http://yangxixi-blog.qiniudn.com/neighbor1.png" alt=""><br>而且这个椭圆的长轴和短轴的比值选多少，也是参照人工经验，没有什么物理含义。<br>这个问题其实可以不从仿照人工选择的角度出发，从建模的方式出发也许有更好的选择：可以粗略的认为用户总是接入距离最近的基站，那么就可以画出每个基站的覆盖范围，就是一个voronoi图，如下图：<br><img src="http://yangxixi-blog.qiniudn.com/voronoi.png" alt=""><br>那么覆盖范围有相邻边界的不就是第一层相邻站点了。<br>用这种方式来定义基站间的层级相比原来的方式有以下好处：</p>
+        <p>在很多场景中都会用到基站的层级的概念，比如邻区规划，频点规划，扰码规划等等，尤其是第一层邻区的概念，但是这概念比较主观，比如下面随机生成的30个站点，那些基站之间是第一层邻层基站，也许不同的人会有不同的结果。<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/sites.png" alt=""><br>之前的算法是仿照人工选择的方式，在两个站点之间画一个椭圆，如果椭圆内没有其他站点，就是第一层基站，如下图<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/old.png" alt=""><br>如果椭圆内有n个站点，那就是第n+1层基站，如下图，两个蓝色基站互为第二层基站<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/neighbor2.png" alt=""><br>这个算法会导致一些很相似的场景，但是结果完全不同，比如下面这个场景，粉色站点位置只偏差了一点点，两个蓝色站点就从第二层基站变成第一层基站了<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/neighbor1.png" alt=""><br>而且这个椭圆的长轴和短轴的比值选多少，也是参照人工经验，没有什么物理含义。<br>这个问题其实可以不从仿照人工选择的角度出发，从建模的方式出发也许有更好的选择：可以粗略的认为用户总是接入距离最近的基站，那么就可以画出每个基站的覆盖范围，就是一个voronoi图，如下图：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/voronoi.png" alt=""><br>那么覆盖范围有相邻边界的不就是第一层相邻站点了。<br>用这种方式来定义基站间的层级相比原来的方式有以下好处：</p>
 <ul>
 <li>计算量大大减少了<br>voronoi图和delaunay三角剖分互为对偶，对基站做delaunay三角剖分，有线相连的就互为邻层基站，delaunay计算复杂度为$O(n^2)$，而原来的方法为$O(n^3)$。</li>
 <li>也可以定义多级层级关系<br>第一层邻区的第一层邻区且不属于第一层邻区就是第二层邻区，以此类推。</li>
 <li>层级关系可以连续化<br>用原来的方法，要不是第一层，要不第二层，但是都是第一层的基站，相互的关系相差也非常大，可以利用voronoi图中基站之间相邻边的长度来定义层级的值。</li>
-<li>可以推广到小区的层级<br>可以假设用户总是接入距离最近的基站的方位角最相近的小区，那么就可以画出每个小区的覆盖区域，如下图，有相邻边的小区就互为邻区了<br><img src="http://yangxixi-blog.qiniudn.com/voronoi_bisection.png" alt=""></li>
+<li>可以推广到小区的层级<br>可以假设用户总是接入距离最近的基站的方位角最相近的小区，那么就可以画出每个小区的覆盖区域，如下图，有相邻边的小区就互为邻区了<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/voronoi_bisection.png" alt=""></li>
 </ul>
 <p>这篇博客没写几个字，不过画这几张图费老劲了。</p>
 
@@ -506,7 +506,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

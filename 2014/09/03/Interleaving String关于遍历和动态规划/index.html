@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="LeetCode,C++," />
+  <meta name="keywords" content="C++,LeetCode," />
 
 
 
@@ -80,20 +80,20 @@
 
 
 <meta name="description" content="晚上做了一下leetcode的Interleaving String，觉得特别适合比较树的遍历和动态规划的效率比较。 题目如下：  Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.For example,Given:s1 = “aabcc”,s2 = “dbbca”,When s3 = “aa">
-<meta name="keywords" content="LeetCode,C++">
+<meta name="keywords" content="C++,LeetCode">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Interleaving String关于遍历和动态规划">
 <meta property="og:url" content="http://yezhangxiang.com/2014/09/03/Interleaving String关于遍历和动态规划/index.html">
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="晚上做了一下leetcode的Interleaving String，觉得特别适合比较树的遍历和动态规划的效率比较。 题目如下：  Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.For example,Given:s1 = “aabcc”,s2 = “dbbca”,When s3 = “aa">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/Interleaving-String-example1.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/Interleaving-String-example2.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/Interleaving-String-example1.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/Interleaving-String-example2.png">
+<meta property="og:updated_time" content="2020-06-27T03:07:30.686Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Interleaving String关于遍历和动态规划">
 <meta name="twitter:description" content="晚上做了一下leetcode的Interleaving String，觉得特别适合比较树的遍历和动态规划的效率比较。 题目如下：  Given s1, s2, s3, find whether s3 is formed by the interleaving of s1 and s2.For example,Given:s1 = “aabcc”,s2 = “dbbca”,When s3 = “aa">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/Interleaving-String-example1.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/Interleaving-String-example1.png">
 
 
 
@@ -336,9 +336,9 @@
 <p>s1 = “bbbbbabbbbabaababaaaabbababbaaabbabbaaabaaaaababbbababbbbbabbbbababbabaabababbbaabababababbbaaababaa”;<br>s2 = “babaaaabbababbbabbbbaabaabbaabbbbaabaaabaababaaaabaaabbaaabaaaabaabaabbbbbbbbbbbabaaabbababbabbabaab”;<br>s3 = “babbbabbbaaabbababbbbababaabbabaabaaabbbbabbbaaabbbaaaaabbbbaabbaaabababbaaaaaabababbababaababbababbbababbbbaaaabaabbabbaaaaabbabbaaaabbbaabaaabaababaababbaaabbbbbabbbbaabbabaabbbbabaaabbababbabbabbab”;</p>
 <p>这题很容易也想到用动态规划，设置表dp，dp[i][j]代表s1的前i个和s2的前j个能和s3的前i+j个匹配上，则根据dp[i][j]就可以推出dp[i+1][j]和dp[i][j+1]。返回dp最右下角的值。</p>
 <p>例如题目中的例子1：s3 = “aadbbcbcac”</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/Interleaving-String-example1.png" alt="example1"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/Interleaving-String-example1.png" alt="example1"></p>
 <p>例子2：s3 = “aadbbcbccc”</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/Interleaving-String-example2.png" alt="example2"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/Interleaving-String-example2.png" alt="example2"></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></div><div class="line"><span class="keyword">public</span>:</div><div class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">isInterleave</span><span class="params">(<span class="built_in">string</span> s1, <span class="built_in">string</span> s2, <span class="built_in">string</span> s3)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> len1 = s1.length(), len2 = s2.length(), len3=s3.length();</div><div class="line">        <span class="keyword">if</span> (len1+len2!=len3)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;&gt; dp(len1+<span class="number">1</span>, <span class="built_in">vector</span>&lt;<span class="keyword">bool</span>&gt;(len2+<span class="number">1</span>, <span class="literal">false</span>));</div><div class="line">        dp[<span class="number">0</span>][<span class="number">0</span>] = <span class="literal">true</span>;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">-1</span>; i &lt; len1; ++i)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">-1</span>;  j &lt; len2; ++j)</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">if</span> (dp[i+<span class="number">1</span>][j+<span class="number">1</span>]==<span class="literal">true</span>)</div><div class="line">                &#123;</div><div class="line">                    <span class="keyword">if</span> (i+<span class="number">1</span> &lt; len1 &amp;&amp; i+j+<span class="number">2</span> &lt; len3 &amp;&amp; s1[i+<span class="number">1</span>]==s3[i+j+<span class="number">2</span>])</div><div class="line">                    &#123;</div><div class="line">                        dp[i+<span class="number">2</span>][j+<span class="number">1</span>] = <span class="literal">true</span>;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">if</span> (j+<span class="number">1</span> &lt; len2 &amp;&amp; i+j+<span class="number">2</span> &lt; len3 &amp;&amp; s2[j+<span class="number">1</span>]==s3[i+j+<span class="number">2</span>])</div><div class="line">                    &#123;</div><div class="line">                        dp[i+<span class="number">1</span>][j+<span class="number">2</span>] = <span class="literal">true</span>;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> dp[len1][len2];</div><div class="line">    &#125;</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
 <p>这样代码就通过了。</p>
 <p>仔细观察，这题用遍历就是一棵二叉树的深度优先遍历，而这棵树对应dp的表格就是(i, j)的左节点就是(i+1, j)右节点是(i, j+1)，所以(i+1, j)的右节点和(i, j+1)的左节点是同样的(i+1, j+1)，进一步加剧了遍历树的重复。</p>
@@ -363,9 +363,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
-          
             <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
           
         </div>
       
@@ -517,7 +517,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

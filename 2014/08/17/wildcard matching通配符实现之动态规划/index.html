@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="LeetCode,C++," />
+  <meta name="keywords" content="C++,LeetCode," />
 
 
 
@@ -80,19 +80,19 @@
 
 
 <meta name="description" content="前天wildcard matching没AC，今天接着搞，改用动态规划。题目再放一次：  Some examples:isMatch(“aa”,”a”) → falseisMatch(“aa”,”aa”) → trueisMatch(“aaa”,”aa”) → falseisMatch(“aa”, ““) → trueisMatch(“aa”, “a“) → trueisMatch(“ab”, “">
-<meta name="keywords" content="LeetCode,C++">
+<meta name="keywords" content="C++,LeetCode">
 <meta property="og:type" content="article">
 <meta property="og:title" content="wildcard matching通配符实现之动态规划">
 <meta property="og:url" content="http://yezhangxiang.com/2014/08/17/wildcard matching通配符实现之动态规划/index.html">
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="前天wildcard matching没AC，今天接着搞，改用动态规划。题目再放一次：  Some examples:isMatch(“aa”,”a”) → falseisMatch(“aa”,”aa”) → trueisMatch(“aaa”,”aa”) → falseisMatch(“aa”, ““) → trueisMatch(“aa”, “a“) → trueisMatch(“ab”, “">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20140817_wildcard_matching_pd.jpg">
-<meta property="og:updated_time" content="2017-11-05T03:59:14.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20140817_wildcard_matching_pd.jpg">
+<meta property="og:updated_time" content="2020-06-27T03:03:34.632Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="wildcard matching通配符实现之动态规划">
 <meta name="twitter:description" content="前天wildcard matching没AC，今天接着搞，改用动态规划。题目再放一次：  Some examples:isMatch(“aa”,”a”) → falseisMatch(“aa”,”aa”) → trueisMatch(“aaa”,”aa”) → falseisMatch(“aa”, ““) → trueisMatch(“aa”, “a“) → trueisMatch(“ab”, “">
-<meta name="twitter:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20140817_wildcard_matching_pd.jpg">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20140817_wildcard_matching_pd.jpg">
 
 
 
@@ -329,7 +329,7 @@
 <p>Some examples:<br>isMatch(“aa”,”a”) → false<br>isMatch(“aa”,”aa”) → true<br>isMatch(“aaa”,”aa”) → false<br>isMatch(“aa”, “<em>“) → true<br>isMatch(“aa”, “a</em>“) → true<br>isMatch(“ab”, “?<em>“) → true<br>isMatch(“aab”, “c</em>a*b”) → false</p>
 </blockquote>
 <p>表格的设计也比较直接，输入两个字符串s，p，假设长度为len_s和len_p，设置一张len_s*len_p的bool型表格PD，其中第i行第j列即PD[i][j]就代表isMatch(s[0…i-1], p[0,…,j-1])</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20140817_wildcard_matching_pd.jpg" alt="wildcard-matching-pd"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20140817_wildcard_matching_pd.jpg" alt="wildcard-matching-pd"></p>
 <p>观察一下规律不难得出</p>
 <p>如果PD[i-1][j]==true或者PD[i][j-1]==true，并且s[i]==’<em>‘或者p[j]==’</em>‘时PD[i][j]==true；<br>如果PD[i-1][j-1]==true时，s[i]与p[j]匹配，则PD[i][j]==true。<br>代码就很容易搞定了。不过在讨论区看到不少人用DP，内存超出限制了，内存也比较好优化，因为从上面可以看到PD[i]只和PD[i-1]有关系，所以只需要保存上一行PD就可以了，这样空间复杂度基本是2*len_p。</p>
 <p>还有要注意的是输入的字符串为空字符串的情况，代码如下：</p>
@@ -360,9 +360,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
-          
             <a href="/tags/C/" rel="tag"># C++</a>
+          
+            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
           
         </div>
       
@@ -514,7 +514,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

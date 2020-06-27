@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="这篇记录一下解第3题大作业Traveling Salesman Problem的过程：  实现greed函数，用贪心法，从第一个点开始，选择距离最近的没有走过的点作为下一个点，直到所有点都成为走过的点，但是这次贪心法没有像在Graph Coloring中那样取得好成绩，6个测试用例得分为：3 + 3 + 3 + 3 + 3 + 0 = 15。problem 6因为点太多内存溢出了，我的实现保存了所">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_greed.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_opt_2.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_opt_k_4.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_delaynay.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/tsp_insert_node.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_greed.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_opt_2.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_opt_k_4.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_delaynay.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_insert_node.png">
+<meta property="og:updated_time" content="2020-06-27T03:09:33.269Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Discrete Optimization学习笔记（4）">
 <meta name="twitter:description" content="这篇记录一下解第3题大作业Traveling Salesman Problem的过程：  实现greed函数，用贪心法，从第一个点开始，选择距离最近的没有走过的点作为下一个点，直到所有点都成为走过的点，但是这次贪心法没有像在Graph Coloring中那样取得好成绩，6个测试用例得分为：3 + 3 + 3 + 3 + 3 + 0 = 15。problem 6因为点太多内存溢出了，我的实现保存了所">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/tsp_greed.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_greed.png">
 
 
 
@@ -330,18 +330,18 @@
       
         <p>这篇记录一下解第3题大作业<a href="https://spark-public.s3.amazonaws.com/optimization/assignments/003/tsp.zip" target="_blank" rel="external">Traveling Salesman Problem</a>的过程：</p>
 <ul>
-<li>实现greed函数，用贪心法，从第一个点开始，选择距离最近的没有走过的点作为下一个点，直到所有点都成为走过的点，但是这次贪心法没有像在Graph Coloring中那样取得好成绩，6个测试用例得分为：3 + 3 + 3 + 3 + 3 + 0 = 15。problem 6因为点太多内存溢出了，我的实现保存了所有点之间的距离，也就是n个点的话，距离矩阵有$n^2$。problem 6 有33810个点，太多了。<br>problem 1 的结果为：<img src="http://yangxixi-blog.qiniudn.com/tsp_greed.png" alt=""></li>
-<li>实现LS 3中的2-opt方法，在贪心法的基础上，如果两个线段相交，swap两个线段，直到没有线段相交，得分为7 + 7 + 7 + 3 + 3 + 0 = 27.<br>problem 1 的结果为：<img src="http://yangxixi-blog.qiniudn.com/tsp_opt_2.png" alt=""></li>
-<li>实现LS 3中的k-opt方法，得出的结果比2-opt略好，但是得分没有变化7 + 7 + 7 + 3 + 3 + 0 = 27.<br>problem 1 的结果为：<img src="http://yangxixi-blog.qiniudn.com/tsp_opt_k_4.png" alt=""></li>
+<li>实现greed函数，用贪心法，从第一个点开始，选择距离最近的没有走过的点作为下一个点，直到所有点都成为走过的点，但是这次贪心法没有像在Graph Coloring中那样取得好成绩，6个测试用例得分为：3 + 3 + 3 + 3 + 3 + 0 = 15。problem 6因为点太多内存溢出了，我的实现保存了所有点之间的距离，也就是n个点的话，距离矩阵有$n^2$。problem 6 有33810个点，太多了。<br>problem 1 的结果为：<img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_greed.png" alt=""></li>
+<li>实现LS 3中的2-opt方法，在贪心法的基础上，如果两个线段相交，swap两个线段，直到没有线段相交，得分为7 + 7 + 7 + 3 + 3 + 0 = 27.<br>problem 1 的结果为：<img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_opt_2.png" alt=""></li>
+<li>实现LS 3中的k-opt方法，得出的结果比2-opt略好，但是得分没有变化7 + 7 + 7 + 3 + 3 + 0 = 27.<br>problem 1 的结果为：<img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_opt_k_4.png" alt=""></li>
 <li><p>于是想试试用Constraint Programming是否能算出规模最小的problem 1的最优解：</p>
 <ul>
-<li>用delaunay三角剖分，每次找下一个点只搜索相连的邻点，如果邻点都已经走过，回溯。上网找了一下，早已有反例证明，TSP问题的最优解不一定是delaynay三角剖分的子图，不过用这方法找的结果应该不会太差。<img src="http://yangxixi-blog.qiniudn.com/tsp_delaynay.png" alt=""></li>
+<li>用delaunay三角剖分，每次找下一个点只搜索相连的邻点，如果邻点都已经走过，回溯。上网找了一下，早已有反例证明，TSP问题的最优解不一定是delaynay三角剖分的子图，不过用这方法找的结果应该不会太差。<img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_delaynay.png" alt=""></li>
 <li><p>运用branch and bound方法，可以这样relaxation estimate：已连线段的距离+头节点的到未走过的节点的最短距离/2+尾节点到未走过的节点的距离/2+$\sum$当前未走过的节点到其他未走过的节点的最短距离+第二短距离之和/2.好拗口，看不懂我也不管了 ┐(′-｀)┌</p>
 <p>原来还对自己想到这个relaxation很得意，没想到也没什么用，尝试了一下，21个点的时候还是很快就得到答案了，但是31个点就跑不出来了，规模最小的测试用例problem 1都有51个点！这条路看来走不通</p>
 </li>
 </ul>
 </li>
-<li>看了一下<a href="https://class.coursera.org/optimization-003/forum/thread?thread_id=58" target="_blank" rel="external">论坛</a>上的讨论，实现了所谓的2.5-opt，其实就是随机产生一组顺序序列，然后按这个顺序添加节点，添加的时候遍历已连节点的位置，添加到最好的位置，直接简单粗暴的重复1000次，然后取最好的一次结果，感觉这个方法好丑陋，但是结果居然不错：10 + 10 + 7 + 7 + 7 + 0 = 41.<br>对problem 1 这个应该是最优解：<img src="http://yangxixi-blog.qiniudn.com/tsp_insert_node.png" alt=""><br>提交这中方法时优化了一下时间：<ul>
+<li>看了一下<a href="https://class.coursera.org/optimization-003/forum/thread?thread_id=58" target="_blank" rel="external">论坛</a>上的讨论，实现了所谓的2.5-opt，其实就是随机产生一组顺序序列，然后按这个顺序添加节点，添加的时候遍历已连节点的位置，添加到最好的位置，直接简单粗暴的重复1000次，然后取最好的一次结果，感觉这个方法好丑陋，但是结果居然不错：10 + 10 + 7 + 7 + 7 + 0 = 41.<br>对problem 1 这个应该是最优解：<img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/tsp_insert_node.png" alt=""><br>提交这中方法时优化了一下时间：<ul>
 <li>计算解的长度没必要都重新从头加到尾，可以由原来的解的长度加上该变量得到；</li>
 <li>没必要真的每次把当前节点插入解再删除，python中的list应该是数组而不是链表，频繁的插入删除非常慢。</li>
 </ul>
@@ -525,7 +525,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="今天用python给一线写了一个小工具，很简单的文本处理，但是一线的兄弟不一定有安装python，所以还是打包成exe发给一线，python打包的帖子网上有很多，主要参考：windows下cx_Freeze生成Python可执行程序【记录】用cx_Freeze把Python代码打包成单个独立的exe可执行文件利用cx_Freeze将py文件打包成exe文件（图文全解） 安装安装时碰到点问题，按照网">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/cx_Freeze_succese.PNG">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/cx_Freeze_install_fail.PNG">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/cx_Freeze_install.PNG">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cx_Freeze_succese.PNG">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cx_Freeze_install_fail.PNG">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cx_Freeze_install.PNG">
+<meta property="og:updated_time" content="2020-06-27T03:37:33.067Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cx_Freeze打包Python代码">
 <meta name="twitter:description" content="今天用python给一线写了一个小工具，很简单的文本处理，但是一线的兄弟不一定有安装python，所以还是打包成exe发给一线，python打包的帖子网上有很多，主要参考：windows下cx_Freeze生成Python可执行程序【记录】用cx_Freeze把Python代码打包成单个独立的exe可执行文件利用cx_Freeze将py文件打包成exe文件（图文全解） 安装安装时碰到点问题，按照网">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/cx_Freeze_succese.PNG">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cx_Freeze_succese.PNG">
 
 
 
@@ -327,8 +327,8 @@
 
       
         <p>今天用python给一线写了一个小工具，很简单的文本处理，但是一线的兄弟不一定有安装python，所以还是打包成exe发给一线，python打包的帖子网上有很多，主要参考：<br><a href="http://blog.csdn.net/wangdamozhizhou/article/details/18135889" target="_blank" rel="external">windows下cx_Freeze生成Python可执行程序</a><br><a href="http://www.crifan.com/use_cx_freeze_to_package_python_to_single_executable_exe/" target="_blank" rel="external">【记录】用cx_Freeze把Python代码打包成单个独立的exe可执行文件</a><br><a href="http://keliang.blog.51cto.com/3359430/661884" target="_blank" rel="external">利用cx_Freeze将py文件打包成exe文件（图文全解）</a></p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装时碰到点问题，按照网上的帖子，安装好之后，如下检查是否安装成功：<br><img src="http://yangxixi-blog.qiniudn.com/cx_Freeze_succese.PNG" alt=""><br>但是我的却提示：<br><img src="http://yangxixi-blog.qiniudn.com/cx_Freeze_install_fail.PNG" alt=""><br>打开路径一看cxfreeze就是个文本文件，不是exe也不是bat：</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/cx_Freeze_install.PNG" alt=""><br>解决办法是自己写一个cxfreeze.bat：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@echo off</div><div class="line">C:/Python27/python.exe C:/Python27/Scripts/cxfreeze %*</div></pre></td></tr></table></figure></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>安装时碰到点问题，按照网上的帖子，安装好之后，如下检查是否安装成功：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cx_Freeze_succese.PNG" alt=""><br>但是我的却提示：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cx_Freeze_install_fail.PNG" alt=""><br>打开路径一看cxfreeze就是个文本文件，不是exe也不是bat：</p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cx_Freeze_install.PNG" alt=""><br>解决办法是自己写一个cxfreeze.bat：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@echo off</div><div class="line">C:/Python27/python.exe C:/Python27/Scripts/cxfreeze %*</div></pre></td></tr></table></figure></p>
 <p>我安装的是<a href="https://pypi.python.org/pypi?:action=display&amp;name=cx_Freeze&amp;version=4.3.4" target="_blank" rel="external">cx_Freeze 4.3.4</a>，有可能是版本问题。</p>
 <h2 id="打包"><a href="#打包" class="headerlink" title="打包"></a>打包</h2><p>我的需求很简单，把单文件的py脚本打包成exe，这个脚本也只用到了tkinter。打包就是在cmd中一句话：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cxfreeze C:\cxFrezeTest.py --base-name=Win32GUI --target-dir C:\yourPath</div></pre></td></tr></table></figure></p>
 <p>其中如果不加<code>--base-name=Win32GUI</code>运行时，控制台黑框框会跳出来比较烦</p>
@@ -526,7 +526,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

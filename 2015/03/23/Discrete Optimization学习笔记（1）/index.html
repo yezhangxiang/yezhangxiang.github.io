@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="上周找资料的时候到Coursera上翻了一下，从此一发不可收拾，决定把Discrete Optimization完整的学完并拿到学位。周末在家把第一周的课程视频看完并把作业做完了，在这里把纪录一下，对自己也是一种监督。 第一周主要基于knapsack问题介绍了greedy algorithms, dynamic programming, branch and bound. 这些算法其实大都接触过，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/dynamic_programming_mp4_195719.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/relaxation_branch_and_bound_20150323_201123.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/dynamic_programming_mp4_195719.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/relaxation_branch_and_bound_20150323_201123.png">
+<meta property="og:updated_time" content="2020-06-27T03:14:11.898Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Discrete Optimization学习笔记（1）">
 <meta name="twitter:description" content="上周找资料的时候到Coursera上翻了一下，从此一发不可收拾，决定把Discrete Optimization完整的学完并拿到学位。周末在家把第一周的课程视频看完并把作业做完了，在这里把纪录一下，对自己也是一种监督。 第一周主要基于knapsack问题介绍了greedy algorithms, dynamic programming, branch and bound. 这些算法其实大都接触过，">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/dynamic_programming_mp4_195719.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/dynamic_programming_mp4_195719.png">
 
 
 
@@ -327,8 +327,8 @@
       
         <p>上周找资料的时候到Coursera上翻了一下，从此一发不可收拾，决定把<a href="https://class.coursera.org/optimization-003" target="_blank" rel="external">Discrete Optimization</a>完整的学完并拿到学位。周末在家把第一周的课程视频看完并把作业做完了，在这里把纪录一下，对自己也是一种监督。</p>
 <p>第一周主要基于knapsack问题介绍了greedy algorithms, dynamic programming, branch and bound. 这些算法其实大都接触过，不过还是有不少新的东西：</p>
-<h3 id="1-在DP中使用trace-back"><a href="#1-在DP中使用trace-back" class="headerlink" title="1.在DP中使用trace back"></a>1.在DP中使用trace back</h3><p>过去用DP算法一般都是在表格中记录中间过程来得到最优过程，其实还可以根据DP表格来获得：<br><img src="http://yangxixi-blog.qiniudn.com/dynamic_programming_mp4_195719.png" alt=""><br>不过这样的坏处是就必须保存整张表格了，比如第一周的作业的knapsack 4和knapsack 6，就因为表格太大，分配内存空间失败了。如果只需要得到最优的value，那么只要保持两列表格，内存就没问题</p>
-<h3 id="2-branch-and-bound"><a href="#2-branch-and-bound" class="headerlink" title="2.branch and bound"></a>2.branch and bound</h3><p>之前的经验是DP一般比树的遍历要快，但是之前树的遍历一般只限于回溯法，而这节课介绍的利用relax来剪枝，可以大大减少计算<br><img src="http://yangxixi-blog.qiniudn.com/relaxation_branch_and_bound_20150323_201123.png" alt=""></p>
+<h3 id="1-在DP中使用trace-back"><a href="#1-在DP中使用trace-back" class="headerlink" title="1.在DP中使用trace back"></a>1.在DP中使用trace back</h3><p>过去用DP算法一般都是在表格中记录中间过程来得到最优过程，其实还可以根据DP表格来获得：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/dynamic_programming_mp4_195719.png" alt=""><br>不过这样的坏处是就必须保存整张表格了，比如第一周的作业的knapsack 4和knapsack 6，就因为表格太大，分配内存空间失败了。如果只需要得到最优的value，那么只要保持两列表格，内存就没问题</p>
+<h3 id="2-branch-and-bound"><a href="#2-branch-and-bound" class="headerlink" title="2.branch and bound"></a>2.branch and bound</h3><p>之前的经验是DP一般比树的遍历要快，但是之前树的遍历一般只限于回溯法，而这节课介绍的利用relax来剪枝，可以大大减少计算<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/relaxation_branch_and_bound_20150323_201123.png" alt=""></p>
 <h3 id="3-search-strategies"><a href="#3-search-strategies" class="headerlink" title="3.search strategies"></a>3.search strategies</h3><p>本科时数据结构树的遍历也就学过先序遍历，中序遍历，后序遍历，广度优先遍历，深度优先遍历。这节课还介绍了best first和 least discrepancy两种遍历，我在作业中只用depth first，另外两个还没试过。</p>
 <h3 id="4-大作业"><a href="#4-大作业" class="headerlink" title="4.大作业"></a>4.大作业</h3><p>先是用DP，顺利提交了Knapsack Problem 1, 2, 3, 5.Knapsack Problem 4, 6内存溢出了，DP其实有很大的内存优化空间，内存溢出主要是因为capacity值太大了，但是pd表没必要以1为capacity的步长，优化起来太麻烦了，直接实现branch and bound用的是depth first，在提交Knapsack Problem 3的时候失败，因为这个测试用例的value density太接近了，剪不了什么枝。<br>遍历的时候我先是走$x_i=0$的分支，发现bound起不到作用，因为先找到的value都太小了，改成先走$x_i=1$的分支，瞬间快了很多。<br>代码上传到<a href="https://github.com/yezhangxiang/DiscreteOptimization" target="_blank" rel="external">github</a>上了，不熟悉python，写的效率不高，尤其是递归</p>
 
@@ -527,7 +527,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

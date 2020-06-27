@@ -79,24 +79,24 @@
 
 
 
-<meta name="description" content="Clark Wright Savings Algorithm用论坛里看到很多人尝试Clark Wright Savings Algorithm解决VRP问题，该算法的思路其实也很简单，先假设所有的客户都有一辆车和仓库传输，在满足车的运载量的提前下合并临近的客户的路线，如下图，合并客户$i$和客户$j$的路线可节省运输距离$s{ij} = c{i0}+c{0j}-c{ij}$计算出所有的$s{ij}">
+<meta name="description" content="Clark Wright Savings Algorithm用论坛里看到很多人尝试Clark Wright Savings Algorithm解决VRP问题，该算法的思路其实也很简单，先假设所有的客户都有一辆车和仓库传输，在满足车的运载量的提前下合并临近的客户的路线，如下图，合并客户$i$和客户$j$的路线可节省运输距离$s{ij} = c{i0}+c{0j}-c{ij}$  计算出所有的$s_{">
 <meta name="keywords" content="Discrete Optimization,Coursera">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Discrete Optimization学习笔记（6）">
 <meta property="og:url" content="http://yezhangxiang.com/2015/05/04/Discrete Optimization学习笔记（6）/index.html">
 <meta property="og:site_name" content="Yangxixi">
-<meta property="og:description" content="Clark Wright Savings Algorithm用论坛里看到很多人尝试Clark Wright Savings Algorithm解决VRP问题，该算法的思路其实也很简单，先假设所有的客户都有一辆车和仓库传输，在满足车的运载量的提前下合并临近的客户的路线，如下图，合并客户$i$和客户$j$的路线可节省运输距离$s{ij} = c{i0}+c{0j}-c{ij}$计算出所有的$s{ij}">
+<meta property="og:description" content="Clark Wright Savings Algorithm用论坛里看到很多人尝试Clark Wright Savings Algorithm解决VRP问题，该算法的思路其实也很简单，先假设所有的客户都有一辆车和仓库传输，在满足车的运载量的提前下合并临近的客户的路线，如下图，合并客户$i$和客户$j$的路线可节省运输距离$s{ij} = c{i0}+c{0j}-c{ij}$  计算出所有的$s_{">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/ClarkWrightSavingsAlgorithm.PNG">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/two_phase_cluster.PNG">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/two_phase_route.PNG">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/vrp3_2phase.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/vrp3_cw.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/ClarkWrightSavingsAlgorithm.PNG">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/two_phase_cluster.PNG">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/two_phase_route.PNG">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/vrp3_2phase.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/vrp3_cw.png">
+<meta property="og:updated_time" content="2020-06-27T03:52:04.253Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Discrete Optimization学习笔记（6）">
-<meta name="twitter:description" content="Clark Wright Savings Algorithm用论坛里看到很多人尝试Clark Wright Savings Algorithm解决VRP问题，该算法的思路其实也很简单，先假设所有的客户都有一辆车和仓库传输，在满足车的运载量的提前下合并临近的客户的路线，如下图，合并客户$i$和客户$j$的路线可节省运输距离$s{ij} = c{i0}+c{0j}-c{ij}$计算出所有的$s{ij}">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/ClarkWrightSavingsAlgorithm.PNG">
+<meta name="twitter:description" content="Clark Wright Savings Algorithm用论坛里看到很多人尝试Clark Wright Savings Algorithm解决VRP问题，该算法的思路其实也很简单，先假设所有的客户都有一辆车和仓库传输，在满足车的运载量的提前下合并临近的客户的路线，如下图，合并客户$i$和客户$j$的路线可节省运输距离$s{ij} = c{i0}+c{0j}-c{ij}$  计算出所有的$s_{">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/ClarkWrightSavingsAlgorithm.PNG">
 
 
 
@@ -328,14 +328,16 @@
       
 
       
-        <h1 id="Clark-Wright-Savings-Algorithm"><a href="#Clark-Wright-Savings-Algorithm" class="headerlink" title="Clark Wright Savings Algorithm"></a>Clark Wright Savings Algorithm</h1><p>用论坛里看到很多人尝试<a href="http://web.mit.edu/urban_or_book/www/book/chapter6/6.4.12.html" target="_blank" rel="external">Clark Wright Savings Algorithm</a>解决VRP问题，<br>该算法的思路其实也很简单，先假设所有的客户都有一辆车和仓库传输，在满足车的运载量的提前下合并临近的客户的路线，如下图，合并客户$i$和客户$j$的路线可节省运输距离$s<em>{ij} = c</em>{i0}+c<em>{0j}-c{ij}$<br><img src="http://yangxixi-blog.qiniudn.com/ClarkWrightSavingsAlgorithm.PNG" alt=""><br>计算出所有的$s</em>{ij}$从大到小合并路线，即得到最后的结果。<br>该方法实现简单，效率非常高，效果也不错，得分为：7 + 0 + 7 + 7 + 0 + 7 = 28.<br>但是这个方法不能解决车辆数量限制的问题，用该方法解决problem 2要用到9辆车，而用例要求小于等于8辆；解决problem 5要用到17辆车，但是用例的要求是小于等于16辆。</p>
+        <h1 id="Clark-Wright-Savings-Algorithm"><a href="#Clark-Wright-Savings-Algorithm" class="headerlink" title="Clark Wright Savings Algorithm"></a>Clark Wright Savings Algorithm</h1><p>用论坛里看到很多人尝试<a href="http://web.mit.edu/urban_or_book/www/book/chapter6/6.4.12.html" target="_blank" rel="external">Clark Wright Savings Algorithm</a>解决VRP问题，<br>该算法的思路其实也很简单，先假设所有的客户都有一辆车和仓库传输，在满足车的运载量的提前下合并临近的客户的路线，如下图，合并客户$i$和客户$j$的路线可节省运输距离$s<em>{ij} = c</em>{i0}+c<em>{0j}-c</em>{ij}$</p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/ClarkWrightSavingsAlgorithm.PNG" alt=""></p>
+<p>计算出所有的$s_{ij}$从大到小合并路线，即得到最后的结果。<br>该方法实现简单，效率非常高，效果也不错，得分为：7 + 0 + 7 + 7 + 0 + 7 = 28.<br>但是这个方法不能解决车辆数量限制的问题，用该方法解决problem 2要用到9辆车，而用例要求小于等于8辆；解决problem 5要用到17辆车，但是用例的要求是小于等于16辆。</p>
 <h1 id="Two-phase-methods"><a href="#Two-phase-methods" class="headerlink" title="Two phase methods"></a>Two phase methods</h1><p>还在论坛里看到一个<a href="http://www.discovery.dist.unige.it/didattica/LS/VRP.pdf" target="_blank" rel="external">超级棒的文档</a>里面介绍的Two phase methods简单易行，而且可以复用之前解决TSP的代码.</p>
 <ul>
 <li>Phase 1 Cluster<br>按照车辆的运载量，把用户分为n个扇区</li>
 </ul>
-<p><img src="http://yangxixi-blog.qiniudn.com/two_phase_cluster.PNG" alt=""></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/two_phase_cluster.PNG" alt=""></p>
 <ul>
-<li>Phase 2 Route<br>每个扇区内的用户做TSP<br><img src="http://yangxixi-blog.qiniudn.com/two_phase_route.PNG" alt=""><br>用该方法可以在phase 1给用户归类时，用一些方法保证归类数小于等于车辆上限，比如对于problem 5，phase 1 简单地直接用图中的Sweep Algorithm仍然会分为17份，无法满足16辆车的限制，我的处理方法是：把客户按照方位角排序，one by one 地把客户归类到下标最小的能容纳该客户的cluster中，<br>two phase 的结果一般都比Clark Wright要更好，如下图，上面一个结果是Two phase的，下面一个是Clark Wright的，明显Two phase的要好一些，最后得分为：10 + 7 + 7 + 7 + 7 + 7 = 45<br>problem 3-Two phase(obj = 545)：<br><img src="http://yangxixi-blog.qiniudn.com/vrp3_2phase.png" alt=""><br>problem 3-Clark Wright(obj = 746)：<br><img src="http://yangxixi-blog.qiniudn.com/vrp3_cw.png" alt=""></li>
+<li>Phase 2 Route<br>每个扇区内的用户做TSP<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/two_phase_route.PNG" alt=""><br>用该方法可以在phase 1给用户归类时，用一些方法保证归类数小于等于车辆上限，比如对于problem 5，phase 1 简单地直接用图中的Sweep Algorithm仍然会分为17份，无法满足16辆车的限制，我的处理方法是：把客户按照方位角排序，one by one 地把客户归类到下标最小的能容纳该客户的cluster中，<br>two phase 的结果一般都比Clark Wright要更好，如下图，上面一个结果是Two phase的，下面一个是Clark Wright的，明显Two phase的要好一些，最后得分为：10 + 7 + 7 + 7 + 7 + 7 = 45<br>problem 3-Two phase(obj = 545)：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/vrp3_2phase.png" alt=""><br>problem 3-Clark Wright(obj = 746)：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/vrp3_cw.png" alt=""></li>
 </ul>
 
       
@@ -533,7 +535,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

@@ -87,19 +87,19 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="今年无线的算法日还包括一个算法大赛，可惜我已经不在无线了，没有参赛资格，老大心血来潮把无线算法大赛的题目拿来办小组算法大赛，拿两个工作日的晚上加班做了个结果，白天还不好意思做题，囧～ 题目题目其实就是一个简化版的自动站点规划：给定一个栅格化的矩形区域的用户分布，在规定时间内（5 min）在该区域内加M个全向站，使得得分 $Fitness$ 尽可能高。具体描述如下：  1.数据集描述给定规划区域和用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/CellularNetwork.jpg">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/kmeansTest.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/balanceTraffic.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/untitled.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/input2Traffic.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/ouput2.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/input1Traffic.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/ouput1.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/CellularNetwork.jpg">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/kmeansTest.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/balanceTraffic.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/untitled.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/input2Traffic.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/ouput2.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/input1Traffic.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/ouput1.png">
+<meta property="og:updated_time" content="2020-06-27T03:42:44.172Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="参加了个算法比赛">
 <meta name="twitter:description" content="今年无线的算法日还包括一个算法大赛，可惜我已经不在无线了，没有参赛资格，老大心血来潮把无线算法大赛的题目拿来办小组算法大赛，拿两个工作日的晚上加班做了个结果，白天还不好意思做题，囧～ 题目题目其实就是一个简化版的自动站点规划：给定一个栅格化的矩形区域的用户分布，在规定时间内（5 min）在该区域内加M个全向站，使得得分 $Fitness$ 尽可能高。具体描述如下：  1.数据集描述给定规划区域和用">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/CellularNetwork.jpg">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/CellularNetwork.jpg">
 
 
 
@@ -376,12 +376,12 @@ FBNUM(j) = \min(\sum_{i\in S_j}(F_{gird}(i)*UENUM_i), T_{UENUM})
 </ul>
 <h1 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h1><p>比赛委员会给的提示是，解决此类问题业界一般使用寻优算法，但是根据我之前的经验，这个问题直接使用寻优算法效果肯定不好，维度太高，解空间的对称性严重（把一个解中的两个小区的所有参数对调就得到效果完全一样的另一个解），先简单粗暴的直接用matlab自带的ga算法尝试了一下，果然直接上寻优算法效果很糟糕。<br>于是思路为，找到一个不错的初始解，根据初始解限制每个维度的寻优范围（规避对称性），并给维度分组（降维）。具体分三步：</p>
 <h2 id="Phase-1-解决覆盖问题"><a href="#Phase-1-解决覆盖问题" class="headerlink" title="Phase 1. 解决覆盖问题"></a>Phase 1. 解决覆盖问题</h2><p>只考虑RSRP和SINR的话，最好的站点分布当然是正规的蜂窝网络：</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/CellularNetwork.jpg" alt="CellularNetwork"></p>
-<p>但是如何在给定的矩形内按照正六边形分布M个点，我没想出好的解决办法，把这个问题化简为在一个矩形内平均分布M个点，谷歌了半天居然没有找到相关的资料，这应该是个很常见的问题啊。倒是搜索出来很多如何在一个球面上平均分布若干个点的研究。<br>后来尝试了一下直接对栅格做聚类算法，效果倒是出乎意料的好，效率很高，而且结果基本就是voronoi图，如果全向站的功率一样的话，他们的覆盖就应该是个voronoi图。把一个正方形区域分为4，5，6，7个区域，结果如下：<br><img src="http://yangxixi-blog.qiniudn.com/kmeansTest.png" alt="kmeans-test"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/CellularNetwork.jpg" alt="CellularNetwork"></p>
+<p>但是如何在给定的矩形内按照正六边形分布M个点，我没想出好的解决办法，把这个问题化简为在一个矩形内平均分布M个点，谷歌了半天居然没有找到相关的资料，这应该是个很常见的问题啊。倒是搜索出来很多如何在一个球面上平均分布若干个点的研究。<br>后来尝试了一下直接对栅格做聚类算法，效果倒是出乎意料的好，效率很高，而且结果基本就是voronoi图，如果全向站的功率一样的话，他们的覆盖就应该是个voronoi图。把一个正方形区域分为4，5，6，7个区域，结果如下：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/kmeansTest.png" alt="kmeans-test"></p>
 <h2 id="Phase-2-根据话务地图修正参数"><a href="#Phase-2-根据话务地图修正参数" class="headerlink" title="Phase 2. 根据话务地图修正参数"></a>Phase 2. 根据话务地图修正参数</h2><p>在第一步的基础上，计算每个小区的话务量，如果当前小区的话务量超出了门限 $T_{UENUM}$则记为问题小区，若两个小区的存在覆盖栅格为相邻栅格，则定义为邻区，每次修正，将问题小区的覆盖栅格分一层给非问题邻区。如下图，小区5为当前小区，邻区1，3，4，6为非问题邻区，小区2，7为问题小区，一次修正话务后结果如下：</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/balanceTraffic.png" alt="balanceTraffic"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/balanceTraffic.png" alt="balanceTraffic"></p>
 <p>相应的，功率和站址也要做出相应的修改，以使得覆盖范围大致符合修正的结果。<br>下图左图是kmeans的结果，标题中的数字是对应的Fitness；中图是话务修正的结果，右图是根据话务修正后的参数真实计算出来的小区覆盖，和我们话务修正的还是比较像的。<br>kmeans算法有一定的随机性，比如下图都是把正方形区域分为5个区域，明显下面一个更符合均匀的感觉，可以设计kmeans函数中的’Replicates’参数，多做几次聚类，选最好的一次。</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/untitled.png" alt="kmeans"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/untitled.png" alt="kmeans"></p>
 <h2 id="Phase-3-寻优算法"><a href="#Phase-3-寻优算法" class="headerlink" title="Phase 3. 寻优算法"></a>Phase 3. 寻优算法</h2><p>有了上面两步给出比较好的初始值后，应用粒子群算法来做寻优（用粒子群只是因为实现比较简单╮(╯▽╰)╭）</p>
 <ul>
 <li>限制每个小区的位置只能在覆盖区域内调整</li>
@@ -389,7 +389,7 @@ FBNUM(j) = \min(\sum_{i\in S_j}(F_{gird}(i)*UENUM_i), T_{UENUM})
 <li>每次小组寻优后都判断剩下的时间够不够一次小组寻优，不够就退出且输出结果。</li>
 </ul>
 <p>我自己构造了两个测试用例：<br>测试用例1：如下话务地图加5个站</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/input2Traffic.png" alt="input2Traffic"><br>结果如下：</p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/input2Traffic.png" alt="input2Traffic"><br>结果如下：</p>
 <table>
 <thead>
 <tr>
@@ -408,9 +408,9 @@ FBNUM(j) = \min(\sum_{i\in S_j}(F_{gird}(i)*UENUM_i), T_{UENUM})
 </tr>
 </tbody>
 </table>
-<p><img src="http://yangxixi-blog.qiniudn.com/ouput2.png" alt="output2"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/ouput2.png" alt="output2"></p>
 <p>测试用例2：如下话务地图加20个站</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/input1Traffic.png" alt="input1Traffic"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/input1Traffic.png" alt="input1Traffic"></p>
 <p>结果如下：</p>
 <table>
 <thead>
@@ -430,7 +430,7 @@ FBNUM(j) = \min(\sum_{i\in S_j}(F_{gird}(i)*UENUM_i), T_{UENUM})
 </tr>
 </tbody>
 </table>
-<p><img src="http://yangxixi-blog.qiniudn.com/ouput1.png" alt="output1"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/ouput1.png" alt="output1"></p>
 <h1 id="实现技巧"><a href="#实现技巧" class="headerlink" title="实现技巧"></a>实现技巧</h1><h2 id="预先计算好所有路损"><a href="#预先计算好所有路损" class="headerlink" title="预先计算好所有路损"></a>预先计算好所有路损</h2><p>RSRP简化由如下公式计算：<br><span>$$\begin{equation}
     RSRP(x, y, indexBi) = Pbi-[A+B*log_{10}(\sqrt{(Xbi-x)^2+(Ybi-y)^2)}] 
 \end{equation}$$</span><!-- Has MathJax --><br>可将所有的$ [A+B*log_{10}(\sqrt{(Xbi-x)^2+(Ybi-y)^2)}]$ 算好放内存中，以后每次使用只要读取即可。</p>
@@ -631,7 +631,7 @@ FBNUM(j) = \min(\sum_{i\in S_j}(F_{gird}(i)*UENUM_i), T_{UENUM})
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

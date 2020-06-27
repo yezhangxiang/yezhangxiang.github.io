@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="最近一个同事在研究如何用地图来修正定位精度，一起讨论了一下，觉得很有意思。平时我们用的车载导航系统应该也都用用地图数据对定位做修正，但是GPS定位比较准，无遮挡稳定情况下一般优于30m，这个校正比较简单，直接拉到距离最近的道路上就可以了。但是我们要校正的对象是基站定位出来的结果，偏差往往都是几百米。比如定位结果如下图（红色是定位点）：第一步是给每个定位点找到几个候选点，如下图的蓝点：现在问题来了，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/mapAdjustLocation_step1.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/mapAdjustLocation_step2.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/mapAdjustLocation_step1.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/mapAdjustLocation_step2.png">
+<meta property="og:updated_time" content="2020-06-27T03:41:46.717Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="利用地图修正定位精度">
 <meta name="twitter:description" content="最近一个同事在研究如何用地图来修正定位精度，一起讨论了一下，觉得很有意思。平时我们用的车载导航系统应该也都用用地图数据对定位做修正，但是GPS定位比较准，无遮挡稳定情况下一般优于30m，这个校正比较简单，直接拉到距离最近的道路上就可以了。但是我们要校正的对象是基站定位出来的结果，偏差往往都是几百米。比如定位结果如下图（红色是定位点）：第一步是给每个定位点找到几个候选点，如下图的蓝点：现在问题来了，">
-<meta name="twitter:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/mapAdjustLocation_step1.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/mapAdjustLocation_step1.png">
 
 
 
@@ -325,7 +325,7 @@
       
 
       
-        <p>最近一个同事在研究如何用地图来修正定位精度，一起讨论了一下，觉得很有意思。<br>平时我们用的车载导航系统应该也都用用地图数据对定位做修正，但是GPS定位比较准，无遮挡稳定情况下一般优于30m，这个校正比较简单，直接拉到距离最近的道路上就可以了。<br>但是我们要校正的对象是基站定位出来的结果，偏差往往都是几百米。比如定位结果如下图（红色是定位点）：<br><img src="http://7qn8bw.com1.z0.glb.clouddn.com/mapAdjustLocation_step1.png" alt=""><br>第一步是给每个定位点找到几个候选点，如下图的蓝点：<br><img src="http://7qn8bw.com1.z0.glb.clouddn.com/mapAdjustLocation_step2.png" alt=""><br>现在问题来了，如何选择候选点作为校正后的定位结果。<br>选择最近的蓝点明显是不行的，定位精度太差了，必须考虑进上下文的关系。目前想到三种做法：</p>
+        <p>最近一个同事在研究如何用地图来修正定位精度，一起讨论了一下，觉得很有意思。<br>平时我们用的车载导航系统应该也都用用地图数据对定位做修正，但是GPS定位比较准，无遮挡稳定情况下一般优于30m，这个校正比较简单，直接拉到距离最近的道路上就可以了。<br>但是我们要校正的对象是基站定位出来的结果，偏差往往都是几百米。比如定位结果如下图（红色是定位点）：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/mapAdjustLocation_step1.png" alt=""><br>第一步是给每个定位点找到几个候选点，如下图的蓝点：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/mapAdjustLocation_step2.png" alt=""><br>现在问题来了，如何选择候选点作为校正后的定位结果。<br>选择最近的蓝点明显是不行的，定位精度太差了，必须考虑进上下文的关系。目前想到三种做法：</p>
 <ul>
 <li><p>branch and bound<br>所有可能的路径，其实就是一个4叉树的遍历，可以认为路程最短的就是最有可能是真实的路径，但是这颗树的深度就是点的个数，如果一次考虑连续的9个点，路径的个数就已经有$4^9$条了，计算量太大，遍历过程中可以考虑设一些条件（比如车不会在连续两个点之间走回头路）剪枝，并且利用动态规划，考虑第2个到第10个点时，充分利用第11个点到第9个点的已有结果。但是总体来看计算量还是太大</p>
 </li>
@@ -506,7 +506,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

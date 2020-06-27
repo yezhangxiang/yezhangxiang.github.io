@@ -87,17 +87,17 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="平时工作中还挺经常用到聚类算法，平日里用k-mean比较多，整理一下主流的聚类算法，主要参考聚类算法研究和各种聚类算法的比较。主流的聚类算法可以大致分成层次化聚类算法、划分式聚类算法、基于密度和网格的聚类算法和其他聚类算法，如下图： 层次聚类算法MATLAB的Hierarchical clustering中给了很好的解释，比如如下5个点，初始情况下看成5个类每次合并最近的两个类，就可以得到如下的分">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/cluster_algorithms.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/multivariate_stats4.gif">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/multivariate_stats19.gif">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/stats_9.40.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/stats_9.43.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/MCL_algorithm.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cluster_algorithms.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/multivariate_stats4.gif">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/multivariate_stats19.gif">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/stats_9.40.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/stats_9.43.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/MCL_algorithm.png">
+<meta property="og:updated_time" content="2020-06-27T03:37:54.620Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="主流的几种聚类算法的思想">
 <meta name="twitter:description" content="平时工作中还挺经常用到聚类算法，平日里用k-mean比较多，整理一下主流的聚类算法，主要参考聚类算法研究和各种聚类算法的比较。主流的聚类算法可以大致分成层次化聚类算法、划分式聚类算法、基于密度和网格的聚类算法和其他聚类算法，如下图： 层次聚类算法MATLAB的Hierarchical clustering中给了很好的解释，比如如下5个点，初始情况下看成5个类每次合并最近的两个类，就可以得到如下的分">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/cluster_algorithms.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cluster_algorithms.png">
 
 
 
@@ -329,9 +329,9 @@
       
 
       
-        <p>平时工作中还挺经常用到聚类算法，平日里用k-mean比较多，整理一下主流的聚类算法，主要参考<a href="http://jos.org.cn/ch/reader/create_pdf.aspx?file_no=20080106&amp;journal_id=jos" target="_blank" rel="external">聚类算法研究</a>和<a href="http://blog.163.com/qianshch@126/blog/static/48972522201092254141315/" target="_blank" rel="external">各种聚类算法的比较</a>。<br>主流的聚类算法可以大致分成层次化聚类算法、划分式聚类算法、基于密度和网格的聚类算法和其他聚类算法，如下图：<br><img src="http://yangxixi-blog.qiniudn.com/cluster_algorithms.png" alt=""></p>
-<h1 id="层次聚类算法"><a href="#层次聚类算法" class="headerlink" title="层次聚类算法"></a>层次聚类算法</h1><p>MATLAB的<a href="http://cn.mathworks.com/help/stats/hierarchical-clustering.html" target="_blank" rel="external">Hierarchical clustering</a>中给了很好的解释，比如如下5个点，初始情况下看成5个类<br><img src="http://yangxixi-blog.qiniudn.com/multivariate_stats4.gif" alt=""><br>每次合并最近的两个类，就可以得到如下的分类结果<br><img src="http://yangxixi-blog.qiniudn.com/multivariate_stats19.gif" alt=""><br>对应的层级关系如下：<br><img src="http://yangxixi-blog.qiniudn.com/stats_9.40.png" alt=""><br>再由设置的分类个数，就可以根据层级关系得到分类结果了：<br><img src="http://yangxixi-blog.qiniudn.com/stats_9.43.png" alt=""></p>
-<h1 id="划分式聚类算法"><a href="#划分式聚类算法" class="headerlink" title="划分式聚类算法"></a>划分式聚类算法</h1><h2 id="基于图论的聚类算法"><a href="#基于图论的聚类算法" class="headerlink" title="基于图论的聚类算法"></a>基于图论的聚类算法</h2><p>图论分裂聚类算法的主要思想是:构造一棵关于数据的最小生成树(minimal spanning tree,简称MST),通过删除最小生成树的最长边来形成类.<br><img src="http://yangxixi-blog.qiniudn.com/MCL_algorithm.png" alt=""></p>
+        <p>平时工作中还挺经常用到聚类算法，平日里用k-mean比较多，整理一下主流的聚类算法，主要参考<a href="http://jos.org.cn/ch/reader/create_pdf.aspx?file_no=20080106&amp;journal_id=jos" target="_blank" rel="external">聚类算法研究</a>和<a href="http://blog.163.com/qianshch@126/blog/static/48972522201092254141315/" target="_blank" rel="external">各种聚类算法的比较</a>。<br>主流的聚类算法可以大致分成层次化聚类算法、划分式聚类算法、基于密度和网格的聚类算法和其他聚类算法，如下图：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/cluster_algorithms.png" alt=""></p>
+<h1 id="层次聚类算法"><a href="#层次聚类算法" class="headerlink" title="层次聚类算法"></a>层次聚类算法</h1><p>MATLAB的<a href="http://cn.mathworks.com/help/stats/hierarchical-clustering.html" target="_blank" rel="external">Hierarchical clustering</a>中给了很好的解释，比如如下5个点，初始情况下看成5个类<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/multivariate_stats4.gif" alt=""><br>每次合并最近的两个类，就可以得到如下的分类结果<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/multivariate_stats19.gif" alt=""><br>对应的层级关系如下：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/stats_9.40.png" alt=""><br>再由设置的分类个数，就可以根据层级关系得到分类结果了：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/stats_9.43.png" alt=""></p>
+<h1 id="划分式聚类算法"><a href="#划分式聚类算法" class="headerlink" title="划分式聚类算法"></a>划分式聚类算法</h1><h2 id="基于图论的聚类算法"><a href="#基于图论的聚类算法" class="headerlink" title="基于图论的聚类算法"></a>基于图论的聚类算法</h2><p>图论分裂聚类算法的主要思想是:构造一棵关于数据的最小生成树(minimal spanning tree,简称MST),通过删除最小生成树的最长边来形成类.<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/MCL_algorithm.png" alt=""></p>
 <h2 id="K均值聚类"><a href="#K均值聚类" class="headerlink" title="K均值聚类"></a>K均值聚类</h2><p>知乎问题：<a href="http://www.zhihu.com/question/22263928" target="_blank" rel="external">能否用易懂的语言简单介绍下聚类？</a>有个回答对k-means解释的很好：</p>
 <blockquote>
 <p>话说在小镇上有三个教会，每个镇民都是信徒，所以嘛，一定要参加一个教会。<br>每个教会定期举办集会，为了让大家尽量少跑腿，集会就选在镇子里大家总跑腿数虽少的地点。<br>总跑远路的信徒们心里不爽，心想，隔壁那教会好像也蛮不错，而且集会点离我家挺近的，不如我换个教会？所以，就这样，一轮下来，很多人换了教会。<br>因为有新人来了老人离开，所以原来的集会点不是最优的啦，要重新确定集合点，下一次的集会会在新地点举办。<br>新集会举办之后，又有人不满意了，就又换教会。如此这般多次之后，终于大家都找到举办集会点离家最近的教会了，所以这折腾就停了，我们把这叫做“收敛”。<br>这就是聚类。</p>
@@ -536,7 +536,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

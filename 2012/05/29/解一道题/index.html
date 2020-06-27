@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="今天下午上班做的突然很烦，一个东西搞了快两个月了，精度没什么进展有点烦躁。赵坚给我说了一道题目，好像是哪个公司的面试题，偷偷做一下，放松一下。题目是这样的：一个台阶一共50个阶梯，从底部开始，每一步可以走1或2或3个阶梯，走到顶一共有多少总走法。 这个题目第一时间想到的是对每一步分情况讨论：   用回溯法做，这其实就是一个三叉树的先序遍历。用递归实现很简单，但是这个是指数增长，而且树的深度比较深，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/201205292328_tree_1.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/201205292328_tree_2.png">
-<meta property="og:updated_time" content="2017-11-04T08:20:36.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/201205292328_tree_1.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/201205292328_tree_2.png">
+<meta property="og:updated_time" content="2020-06-27T03:41:55.650Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="解一道题">
 <meta name="twitter:description" content="今天下午上班做的突然很烦，一个东西搞了快两个月了，精度没什么进展有点烦躁。赵坚给我说了一道题目，好像是哪个公司的面试题，偷偷做一下，放松一下。题目是这样的：一个台阶一共50个阶梯，从底部开始，每一步可以走1或2或3个阶梯，走到顶一共有多少总走法。 这个题目第一时间想到的是对每一步分情况讨论：   用回溯法做，这其实就是一个三叉树的先序遍历。用递归实现很简单，但是这个是指数增长，而且树的深度比较深，">
-<meta name="twitter:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/201205292328_tree_1.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/201205292328_tree_1.png">
 
 
 
@@ -327,10 +327,10 @@
       
         <p>今天下午上班做的突然很烦，一个东西搞了快两个月了，精度没什么进展有点烦躁。赵坚给我说了一道题目，好像是哪个公司的面试题，偷偷做一下，放松一下。题目是这样的：一个台阶一共50个阶梯，从底部开始，每一步可以走1或2或3个阶梯，走到顶一共有多少总走法。</p>
 <p>这个题目第一时间想到的是对每一步分情况讨论：</p>
-<p> <img src="http://7qn8bw.com1.z0.glb.clouddn.com/201205292328_tree_1.png" alt="tree"></p>
+<p> <img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/201205292328_tree_1.png" alt="tree"></p>
 <p>用回溯法做，这其实就是一个三叉树的先序遍历。用递归实现很简单，但是这个是指数增长，而且树的深度比较深，都是1的话要50步，最少也要3×16+2×1共17步。也就是树的深度在17到50之间也就是在[3^17,3^50]=[129140163, 7.1790e+023]之间。果然跑了半天没结果。我修改了一下数据，当台阶数改为32时就已经开始要等待几秒了。用这个方法在我有生之年是得不到答案的。</p>
 <p>于是想从排列组合入手简化，现在的方法是给出排列，可不可以先找出组合数。也就是如果台阶是共5梯，1112，1121，1211，2111是4种排列，但是我可以先找到3个1，1个2这个组合，再考虑这个组合有多少种排列方法。这样的话节点数就会少掉很多，树画出来就应该变成：</p>
-<p> <img src="http://7qn8bw.com1.z0.glb.clouddn.com/201205292328_tree_2.png" alt="tree"></p>
+<p> <img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/201205292328_tree_2.png" alt="tree"></p>
 <p>也就是只有1下面才有1，2，3三个节点，2下面只有2，3两个节点，3下面只有3一个节点。这样可以保证每条路径得到的是一种不同的组合。先计算一下第n层的节点数。观察一下可以看到每一层只有1个1，第n层有n个2，第1层1个3，第n层3的个数是第n-1层1的个数+2的个数+3的个数。设第n层有Sn个3，则S1=1,Sn=1+(n-1)+Sn-1.得到Sn=n(n+1)/2.所以第n层节点数是1+n+Sn=(n^2+3n+2)/2。而原来第n层的节点数是3^n。一下子从指数增长减低到了n的平方级。树的深度仍然是在17到50之间，但是节点数减少为在 [171, 1326]之间。这个数量级，一瞬间有哪些组合就出来了。</p>
 <p>但是在每个节点上有多少种排列，也就是说有a个1，b个2，c个3有多少种排列，我本来想当然觉得这个很简单，认真一想一时给不出直接的关于a，b，c的直接解，但是可以很容易想到递归的方法，如果说有f(a,b,c)种排列，如果第一步走1个台阶，后面就有a-1个1，b个2，c个3；如果第一步走2个台阶，后面就有a个1，b-1个2，c个3；如果第一步走3个台阶，后面就有a个1，b个2，c-1个3.所以f(a,b,c)= f(a-1,b,c) +f(a,b-1,c) +f(a,b,c-1),f(0,0,1)=f(0,1,0)=f(1,0,0)=1.但是这样求的话又变成一个三叉数，又变成3^n复杂度的问题了。但是很容易发现在f(a,b,c)中a,b,c是等价关系，也就是说f(a,b,c)=f(a,c,b)=f(c,a,b)。所以又变成从排列变成组合的一个过程。每次迭代之前先把f(a,b,c)的a,b,c按照升序或者降序排列。而且f(a,b,c)不用每次算，算一次保存下来，以后只要查表就可以了。这样算法稍稍复杂了一点，但是代码仍然很好写，而且复杂度是n的平方，n最大只有50，每个f(a,b,c)也只需要计算一次即可，因此前面第一步得到的组合再转换成排列，每个节点所花费的时间就几乎是常数的。但是要先注意一个问题，排列数可能很大，很可能溢出。检验一下，很明显f(a,b,c)当a,b,c大小接近的时候f(a,b,c)更大一些。50个台阶a,b,c大小接近的解比如7个1，8个2，9个3.如果用unsigned long，果然f(7,8,9)溢出，改用UINT64就可以了。</p>
 <p>具体结果的数值不记得了，代码在公司不能带出来。把思路记录一下，这个f(a,b,c)肯定有方法直接得到，不用递归来做。赵坚说这题目有nlogn的解法，以后再想。</p>
@@ -506,7 +506,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

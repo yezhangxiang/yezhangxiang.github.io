@@ -87,14 +87,14 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="最近在做一些硬件加速的东西，把之前做的一个模块计算量最大的部分提取出来用FPGA异构并行处理. [TOC] 尝试不同语言之间的调用原来的软件平台是用C#开发的，特性模块是用Java开发的，而FPGA板子是用OpenCL来开发，关系如下：  ##1. JAVA–(JNI)–&amp;gt;C++  用native关键字 先在Java中声明：  12345package myPackage;public cl">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/csharp-java-cpp.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/csharp-java-cpp2.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/csharp-java-cpp3.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/csharp-java-cpp.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/csharp-java-cpp2.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/csharp-java-cpp3.png">
+<meta property="og:updated_time" content="2020-06-27T03:38:59.866Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="硬件加速的预研工作">
 <meta name="twitter:description" content="最近在做一些硬件加速的东西，把之前做的一个模块计算量最大的部分提取出来用FPGA异构并行处理. [TOC] 尝试不同语言之间的调用原来的软件平台是用C#开发的，特性模块是用Java开发的，而FPGA板子是用OpenCL来开发，关系如下：  ##1. JAVA–(JNI)–&amp;gt;C++  用native关键字 先在Java中声明：  12345package myPackage;public cl">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/csharp-java-cpp.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/csharp-java-cpp.png">
 
 
 
@@ -329,7 +329,7 @@
         <p>最近在做一些硬件加速的东西，把之前做的一个模块计算量最大的部分提取出来用FPGA异构并行处理.</p>
 <p>[TOC]</p>
 <h1 id="尝试不同语言之间的调用"><a href="#尝试不同语言之间的调用" class="headerlink" title="尝试不同语言之间的调用"></a>尝试不同语言之间的调用</h1><p>原来的软件平台是用C#开发的，特性模块是用Java开发的，而FPGA板子是用OpenCL来开发，关系如下：</p>
-<p><img src="http://yangxixi-blog.qiniudn.com/csharp-java-cpp.png" alt="csharp-java-cpp"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/csharp-java-cpp.png" alt="csharp-java-cpp"></p>
 <p>##1. JAVA–(JNI)–&gt;C++</p>
 <ul>
 <li>用native关键字 先在Java中声明：</li>
@@ -366,7 +366,7 @@
 </li>
 </ul>
 <p>就可以使用Java中实现的类了。</p>
-<h1 id="64bit与32bit之间的通信"><a href="#64bit与32bit之间的通信" class="headerlink" title="64bit与32bit之间的通信"></a>64bit与32bit之间的通信</h1><p>但是前几天硬件的同事告诉我，FPGA的板子用的是Altera的芯片，只有提供64bit的库函数，第一反应是增加一个流程：<br><img src="http://yangxixi-blog.qiniudn.com/csharp-java-cpp2.png" alt="csharp-java-cpp2"></p>
+<h1 id="64bit与32bit之间的通信"><a href="#64bit与32bit之间的通信" class="headerlink" title="64bit与32bit之间的通信"></a>64bit与32bit之间的通信</h1><p>但是前几天硬件的同事告诉我，FPGA的板子用的是Altera的芯片，只有提供64bit的库函数，第一反应是增加一个流程：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/csharp-java-cpp2.png" alt="csharp-java-cpp2"></p>
 <h2 id="C-32bit-–-COM-–-gt-C-64bit"><a href="#C-32bit-–-COM-–-gt-C-64bit" class="headerlink" title="C++(32bit)–(COM)–&gt;C++(64bit)"></a>C++(32bit)–(COM)–&gt;C++(64bit)</h2><p>参考资料：</p>
 <ul>
 <li><a href="http://www.cnblogs.com/mazhenyu/archive/2007/06/28/798710.html" target="_blank" rel="external">64位进程调用32位dll的解决方法</a></li>
@@ -381,7 +381,7 @@
 <li><a href="http://www.cnblogs.com/fangyukuan/archive/2010/09/09/1822216.html" target="_blank" rel="external">windows笔记-内存映射文件</a></li>
 <li><a href="http://blog.chinaunix.net/uid-20761674-id-3072683.html" target="_blank" rel="external">内存映射文件原理探索</a></li>
 </ul>
-<p><img src="http://yangxixi-blog.qiniudn.com/csharp-java-cpp3.png" alt="csharp-java-cpp3"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/csharp-java-cpp3.png" alt="csharp-java-cpp3"></p>
 <p>#字节序问题</p>
 <p>C++和Java之间用内存映射文件通信遇到一个问题，两者的字节序不同。</p>
 <p><a href="http://blog.csdn.net/sunshine1314/article/details/2309655" target="_blank" rel="external">关于Big Endian 和 Little Endian</a></p>
@@ -586,7 +586,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

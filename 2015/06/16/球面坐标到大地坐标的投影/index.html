@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="最近在Matlab上搞了个小工具，但是从经纬度到大地坐标的投影一直没和商用工具对齐，今天花了半天时间研究了一下投影。主要有以下几点； 投影方式地图投影方式有非常多，主要的有以下三种： 圆柱投影 圆锥投影 方位角投影 对我们最主要的当然就是圆柱投影了，最常用的就是：  Mercator projection Universal transverse Mercator projection(UTM)">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/projecta.gif">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/proje14a.gif">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/projec3a.gif">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/utm.png">
-<meta property="og:updated_time" content="2017-11-05T07:26:39.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/projecta.gif">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/proje14a.gif">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/projec3a.gif">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/utm.png">
+<meta property="og:updated_time" content="2020-06-27T03:40:38.763Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="球面坐标到大地坐标的投影">
 <meta name="twitter:description" content="最近在Matlab上搞了个小工具，但是从经纬度到大地坐标的投影一直没和商用工具对齐，今天花了半天时间研究了一下投影。主要有以下几点； 投影方式地图投影方式有非常多，主要的有以下三种： 圆柱投影 圆锥投影 方位角投影 对我们最主要的当然就是圆柱投影了，最常用的就是：  Mercator projection Universal transverse Mercator projection(UTM)">
-<meta name="twitter:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/projecta.gif">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/projecta.gif">
 
 
 
@@ -329,9 +329,9 @@
       
         <p>最近在Matlab上搞了个小工具，但是从经纬度到大地坐标的投影一直没和商用工具对齐，今天花了半天时间研究了一下投影。<br>主要有以下几点；</p>
 <h2 id="投影方式"><a href="#投影方式" class="headerlink" title="投影方式"></a>投影方式</h2><p><a href="https://zh.wikipedia.org/wiki/%E5%9C%B0%E5%9B%BE%E6%8A%95%E5%BD%B1" target="_blank" rel="external">地图投影</a>方式有非常多，主要的有以下三种：</p>
-<h3 id="圆柱投影"><a href="#圆柱投影" class="headerlink" title="圆柱投影"></a>圆柱投影</h3><p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/projecta.gif" alt="Cylindrical Projections"></p>
-<h3 id="圆锥投影"><a href="#圆锥投影" class="headerlink" title="圆锥投影"></a>圆锥投影</h3><p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/proje14a.gif" alt="Conic Projections"></p>
-<h3 id="方位角投影"><a href="#方位角投影" class="headerlink" title="方位角投影"></a>方位角投影</h3><p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/projec3a.gif" alt="Azimuthal Projections"></p>
+<h3 id="圆柱投影"><a href="#圆柱投影" class="headerlink" title="圆柱投影"></a>圆柱投影</h3><p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/projecta.gif" alt="Cylindrical Projections"></p>
+<h3 id="圆锥投影"><a href="#圆锥投影" class="headerlink" title="圆锥投影"></a>圆锥投影</h3><p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/proje14a.gif" alt="Conic Projections"></p>
+<h3 id="方位角投影"><a href="#方位角投影" class="headerlink" title="方位角投影"></a>方位角投影</h3><p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/projec3a.gif" alt="Azimuthal Projections"></p>
 <p>对我们最主要的当然就是圆柱投影了，最常用的就是：</p>
 <ul>
 <li>Mercator projection</li>
@@ -340,7 +340,7 @@
 <h2 id="地球建模"><a href="#地球建模" class="headerlink" title="地球建模"></a>地球建模</h2><p>地球并不是一个标准的球形，一般用椭球来模拟地球，常用的模型有：</p>
 <h2 id="基准点"><a href="#基准点" class="headerlink" title="基准点"></a>基准点</h2><p>基准点的经纬度对应到大地坐标的原点</p>
 <h2 id="举例"><a href="#举例" class="headerlink" title="举例"></a>举例</h2><p>指定好以上三点就可以把经纬度转变为大地坐标了，比如在<a href="http://yezhangxiang.com/2015/04/20/matlab%E7%BC%96%E7%A8%8B%E5%A4%87%E5%BF%98%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/">之前的一篇文章</a>中，用Matlab把经纬度映射到大地坐标：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">utmstruct = defaultm(&apos;utm&apos;);    % 指定了投影方式是UTM</div><div class="line">utmstruct.zone = &apos;18T&apos;;         % 指定了UTM的zone也就指定了基准点，如下图所示，Lat Lon [0, -75]</div><div class="line">                                % 对应xy为[50000, 0]</div><div class="line">utmstruct.geoid = ellipsoid;    % 指定了地球建模，这里ellipsoid其实是一个1*2的向量，</div><div class="line">                                % 第一个数表示地球半径，第二个数表示椭球的偏心率</div></pre></td></tr></table></figure></p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/utm.png" alt=""></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/utm.png" alt=""></p>
 
       
     </div>
@@ -535,7 +535,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

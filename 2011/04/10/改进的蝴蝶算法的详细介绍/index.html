@@ -87,22 +87,22 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="蝴蝶算法是一种常用的插值细分算法，由NIRA  DYN  and  DAVID  LEVIN (Tel-Aviv  University) and JOHN  A.  GREGORY (Brunei  University)在论文A Butterfly  Subdivision  Scheme  for Surface Interpolation  with  Tension  Control">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_tri_interpolation.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_two_degree_6.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_one_degree_6.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_no_degree_6.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_four_points.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_origin.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_loop_twice.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_butterfly_twice.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_origin_4.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_butterfly_4.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_butterfly_4th_4.png">
-<meta property="og:updated_time" content="2017-11-04T08:39:47.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_tri_interpolation.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_two_degree_6.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_one_degree_6.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_no_degree_6.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_four_points.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_origin.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_loop_twice.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_butterfly_twice.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_origin_4.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_butterfly_4.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_butterfly_4th_4.png">
+<meta property="og:updated_time" content="2020-06-27T03:42:04.369Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="改进的蝴蝶算法的详细介绍">
 <meta name="twitter:description" content="蝴蝶算法是一种常用的插值细分算法，由NIRA  DYN  and  DAVID  LEVIN (Tel-Aviv  University) and JOHN  A.  GREGORY (Brunei  University)在论文A Butterfly  Subdivision  Scheme  for Surface Interpolation  with  Tension  Control">
-<meta name="twitter:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_tri_interpolation.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_tri_interpolation.png">
 
 
 
@@ -339,14 +339,14 @@
 <p>##Butterfly算法简介</p>
 <p>该算法的输入数据为原始控制TIN面网，输出数据为加密后的TIN面网（经过插值）。具体过程如下：</p>
 <p>①对于每一个三角形，在每条边的中点处附近插值，把每个三角形一分为四（如图2）。</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_tri_interpolation.png" alt="tri-interpolation"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_tri_interpolation.png" alt="tri-interpolation"></p>
 <p>②新插入的点（即所谓奇点）都在已有三角形的边上。对于它们的坐标点的计算，将分以下几种情况：</p>
 <p>（a）当该奇点所在边的两个端点的度均为6时（如图3）</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_two_degree_6.png" alt="two-degree-6"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_two_degree_6.png" alt="two-degree-6"></p>
 <p>如上图所示，中间黄色点为插入的奇点，它的坐标值通过周围八个点（绿色）的坐标值加权平均得到。并且周围的点按权重不同可分为三类，各自权重如下：</p>
 <p>a = 1/2，b = 1/8，c = -1/16</p>
 <p>（b）当该奇点所在边的两个端点中，一个端点的度为6，另一个不为6时（如图4）</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_one_degree_6.png" alt="one-degree-6"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_one_degree_6.png" alt="one-degree-6"></p>
 <p>如图4所示，奇点所在的边的两个端点中，点v的度不为6，点e0的度为6，则奇点的坐标值要根据点v及v的所有相临结点（绿色）的坐标加权得到。v点的权重如下：</p>
 <p>v = 3/4</p>
 <p>假设点v共有n个邻结点，则各邻结点的权值可根据n值的不同分别计算：</p>
@@ -354,26 +354,26 @@
 <p>n = 4时：e0 = 3/8，e1 = 0，e2 = -1/8，e3 = 0；</p>
 <p>n ≥ 5时：ej = [1/4 + cos(2∏<em>j/n) + 1/2 </em> cos(4∏*j/n)]/n，其中j = 0，1，…，n-1。</p>
 <p>（c）当该新边点所在边的两个端点的度均不为6时（如图5）</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_no_degree_6.png" alt="no-degree-6"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_no_degree_6.png" alt="no-degree-6"></p>
 <p>先以v1为中心，按前述（b）情况中的方法计算出奇点的坐标，记为(x1，y1，z1)，再以v2为中心同样计算出奇点的坐标，记为(x2，y2，z2)，然后对两组坐标取平均值，得到奇点的坐标。</p>
 <p>（d）当该奇点所在边是初始控制网的边界时（当网格不闭合时存在这种情况，如图6），采用四点法。</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_four_points.png" alt="four-points"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_four_points.png" alt="four-points"></p>
 <p>此时参与计算的各点的权值取值如下：</p>
 <p>a = 9/16，b = -1/16</p>
 <p> 改进的蝴蝶细分和loop细分的对比图如下：</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_origin.png" alt="origin"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_origin.png" alt="origin"></p>
 <p>原始网格</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_loop_twice.png" alt="loop-twice"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_loop_twice.png" alt="loop-twice"></p>
 <p>两次loop的效果</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_butterfly_twice.png" alt="butterfly-twice"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_butterfly_twice.png" alt="butterfly-twice"></p>
 <p>两次改进蝴蝶细分的效果</p>
 <p>可以看出还是loop细分的曲面视觉效果更加好。</p>
 <p>而且在初始网格太过稀疏的情况下，蝴蝶细分出来的效果很不理想：</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_origin_4.png" alt="origin-4"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_origin_4.png" alt="origin-4"></p>
 <p>初始网格，左边为面显示右边为线显示</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_butterfly_4.png" alt="butterfly-4"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_butterfly_4.png" alt="butterfly-4"></p>
 <p>一次改进的蝴蝶细分</p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20110410_butterfly_4th_4.png" alt="butterfly-4th-4"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20110410_butterfly_4th_4.png" alt="butterfly-4th-4"></p>
 <p>四次蝴蝶细分后的图像</p>
 
       
@@ -544,7 +544,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

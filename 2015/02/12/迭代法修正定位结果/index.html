@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="在上一篇博客中研究了用bayes方法修正定位结果，最近尝试了一下从数值解法的角度来看这个问题。 用Bayes方法的缺点实际中采集的数据，只有不到10%的数据有AGPS，本意是利用这10%的带AGPS的数据来训练转移概率矩阵$A$，再用以修正全部的定位结果，但是由贝叶斯定理: $$\begin{equation} P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)} \e">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/transition-probability-both.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/transition-probability-both.png">
+<meta property="og:updated_time" content="2020-06-27T03:42:18.049Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="迭代法修正定位结果">
 <meta name="twitter:description" content="在上一篇博客中研究了用bayes方法修正定位结果，最近尝试了一下从数值解法的角度来看这个问题。 用Bayes方法的缺点实际中采集的数据，只有不到10%的数据有AGPS，本意是利用这10%的带AGPS的数据来训练转移概率矩阵$A$，再用以修正全部的定位结果，但是由贝叶斯定理: $$\begin{equation} P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)} \e">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/transition-probability-both.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/transition-probability-both.png">
 
 
 
@@ -329,7 +329,7 @@
 <span>$$\begin{equation}
 P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)}
 \end{equation}$$</span><!-- Has MathJax -->
-<p>可以看到，求$P(A| B)$，有一个隐含的前提要求训练库和校正对象的$P(A),P(B)$分布是相同的，但是现实中带AGPS部分数据和非AGPS部分数据的分布相差可能非常大，比如室外AGPS的比例大于10%，而室内AGPS的比例就几乎为0.<br>举一个栗子，在上篇博客的例子上增加非AGPS部分，蓝色是AGPS部分数据，红色是非AGPS部分数据，两者有相同的转移概率（黑色箭头）<br><img src="http://yangxixi-blog.qiniudn.com/transition-probability-both.png" alt=""><br>由蓝色AGPS部分可以得到转移矩阵：</p>
+<p>可以看到，求$P(A| B)$，有一个隐含的前提要求训练库和校正对象的$P(A),P(B)$分布是相同的，但是现实中带AGPS部分数据和非AGPS部分数据的分布相差可能非常大，比如室外AGPS的比例大于10%，而室内AGPS的比例就几乎为0.<br>举一个栗子，在上篇博客的例子上增加非AGPS部分，蓝色是AGPS部分数据，红色是非AGPS部分数据，两者有相同的转移概率（黑色箭头）<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/transition-probability-both.png" alt=""><br>由蓝色AGPS部分可以得到转移矩阵：</p>
 <span>$$\begin{equation}       %开始数学环境
 \left[                 %左括号
   \begin{array}{}   %该矩阵一共3列，每一列都居中放置
@@ -740,7 +740,7 @@ P(A| B) = \frac{P(B|A) \cdot P(A)}{P(B)}
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

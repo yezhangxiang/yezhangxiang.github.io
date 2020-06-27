@@ -87,16 +87,16 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="不同的寻优算法肯定适合不同的场景，最近针对网络优化问题尝试了几种主流的寻优算法。 问题描述如下图，某块区域内有n个基站，每个小区的参数（功率，天线方位角，天线下倾角）有一定的调整范围，求如何调整参数，使得该区域的信号覆盖达到最优。这是一个很典型的NP问题。该问题有以下特点：  维度高往往一片优化区域内有几百上千个小区，每个小区有多个参数可调，寻优维度上千。 维度相关性随距离增加快速下降共站小区之前">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/sites.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/GTS_step1.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/GTS_step2.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/complexity_example.png">
-<meta property="og:image" content="http://yangxixi-blog.qiniudn.com/Rastrigin.png">
-<meta property="og:updated_time" content="2017-11-04T08:06:33.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/sites.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/GTS_step1.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/GTS_step2.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/complexity_example.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/Rastrigin.png">
+<meta property="og:updated_time" content="2020-06-27T03:39:07.009Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="寻优算法对比">
 <meta name="twitter:description" content="不同的寻优算法肯定适合不同的场景，最近针对网络优化问题尝试了几种主流的寻优算法。 问题描述如下图，某块区域内有n个基站，每个小区的参数（功率，天线方位角，天线下倾角）有一定的调整范围，求如何调整参数，使得该区域的信号覆盖达到最优。这是一个很典型的NP问题。该问题有以下特点：  维度高往往一片优化区域内有几百上千个小区，每个小区有多个参数可调，寻优维度上千。 维度相关性随距离增加快速下降共站小区之前">
-<meta name="twitter:image" content="http://yangxixi-blog.qiniudn.com/sites.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/sites.png">
 
 
 
@@ -329,7 +329,7 @@
 
       
         <p>不同的寻优算法肯定适合不同的场景，最近针对网络优化问题尝试了几种主流的寻优算法。</p>
-<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>如下图，某块区域内有n个基站，每个小区的参数（功率，天线方位角，天线下倾角）有一定的调整范围，求如何调整参数，使得该区域的信号覆盖达到最优。<br><img src="http://yangxixi-blog.qiniudn.com/sites.png" alt=""><br>这是一个很典型的NP问题。该问题有以下特点：</p>
+<h1 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h1><p>如下图，某块区域内有n个基站，每个小区的参数（功率，天线方位角，天线下倾角）有一定的调整范围，求如何调整参数，使得该区域的信号覆盖达到最优。<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/sites.png" alt=""><br>这是一个很典型的NP问题。该问题有以下特点：</p>
 <ol>
 <li>维度高<br>往往一片优化区域内有几百上千个小区，每个小区有多个参数可调，寻优维度上千。</li>
 <li>维度相关性随距离增加快速下降<br>共站小区之前的关系比较紧密，而相隔两层以上的小区基本没什么影响，比如上图左上角的小区调整对右下角的小区的覆盖基本没有什么影响。</li>
@@ -338,8 +338,8 @@
 <h1 id="寻优算法"><a href="#寻优算法" class="headerlink" title="寻优算法"></a>寻优算法</h1><p>主要尝试了一下几种算法：</p>
 <h2 id="GTS-网格禁忌算法"><a href="#GTS-网格禁忌算法" class="headerlink" title="GTS 网格禁忌算法"></a>GTS 网格禁忌算法</h2><p>其实就是<a href="http://en.wikipedia.org/wiki/Tabu_search" target="_blank" rel="external">禁忌算法</a>寻找领域的过程用了网格法，以下以2维为例子介绍一下网格法:</p>
 <ol>
-<li>以原始参数为初始节点，向8个方向搜索（如果是n维，就是向n维空间中的单位体的每个角和面的方向），将每个面的最大值加入禁忌表；<br><img src="http://yangxixi-blog.qiniudn.com/GTS_step1.png" alt=""></li>
-<li>以第一步8个方向最优值中不在禁忌表中的最大值作为下一次搜索的起点，向8个方向搜索。<br><img src="http://yangxixi-blog.qiniudn.com/GTS_step2.png" alt=""></li>
+<li>以原始参数为初始节点，向8个方向搜索（如果是n维，就是向n维空间中的单位体的每个角和面的方向），将每个面的最大值加入禁忌表；<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/GTS_step1.png" alt=""></li>
+<li>以第一步8个方向最优值中不在禁忌表中的最大值作为下一次搜索的起点，向8个方向搜索。<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/GTS_step2.png" alt=""></li>
 <li>若8个方向的最优值都在禁忌表中，停止搜索。</li>
 </ol>
 <h2 id="GA-遗传算法"><a href="#GA-遗传算法" class="headerlink" title="GA 遗传算法"></a>GA 遗传算法</h2><p>直接使用matlab自带的ga函数，所有参数使用的也都是默认值。</p>
@@ -490,7 +490,7 @@
 </tbody>
 </table>
 <p>#结果分析</p>
-<p>结果挺令人意外，增加每组小区数应该增大了解空间的可能，但事实上小区分组没有起到什么效果，适应度几乎没有什么变化。简陋的GTS和GPSO反而在效率和效果上都不错，这应该是因为我们的寻优空间是比较简单的，往往是单凸包或者是双凸包，如下图<br><img src="http://yangxixi-blog.qiniudn.com/complexity_example.png" alt=""><br>而不是像Rastrigin函数（如下图）很难找到最优解<br><img src="http://yangxixi-blog.qiniudn.com/Rastrigin.png" alt=""><br>所以用一些简单的寻优方式效果差不多，效率还更有优势。想要达到更优的效果，可以每组小区寻优采用寻优能力相对弱但是收敛快的算法，但增加迭代次数（所有组寻优完成后再寻优一次）。</p>
+<p>结果挺令人意外，增加每组小区数应该增大了解空间的可能，但事实上小区分组没有起到什么效果，适应度几乎没有什么变化。简陋的GTS和GPSO反而在效率和效果上都不错，这应该是因为我们的寻优空间是比较简单的，往往是单凸包或者是双凸包，如下图<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/complexity_example.png" alt=""><br>而不是像Rastrigin函数（如下图）很难找到最优解<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/Rastrigin.png" alt=""><br>所以用一些简单的寻优方式效果差不多，效率还更有优势。想要达到更优的效果，可以每组小区寻优采用寻优能力相对弱但是收敛快的算法，但增加迭代次数（所有组寻优完成后再寻优一次）。</p>
 
       
     </div>
@@ -687,7 +687,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

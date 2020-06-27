@@ -87,13 +87,13 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="网规网优项目中通常要用到地图数据，常见的地图格式有planet和osm，真正工程项目中一般用的是planet格式的地图，平时算法验证一般用Matlab，今天尝试了一下Matlab读取planet地图。planet地图的demo可以在这里下载，本文用这个demo的“南宁5-planet”为例，一般地图里包含以下几个文件夹：clutter里包含每个栅格的地物类型，buildings包含建筑物高度，he">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/planet.PNG">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/clutter.png">
-<meta property="og:updated_time" content="2017-11-05T07:26:58.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/planet.PNG">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/clutter.png">
+<meta property="og:updated_time" content="2020-06-27T03:06:43.187Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Matlab读取planet格式地图">
 <meta name="twitter:description" content="网规网优项目中通常要用到地图数据，常见的地图格式有planet和osm，真正工程项目中一般用的是planet格式的地图，平时算法验证一般用Matlab，今天尝试了一下Matlab读取planet地图。planet地图的demo可以在这里下载，本文用这个demo的“南宁5-planet”为例，一般地图里包含以下几个文件夹：clutter里包含每个栅格的地物类型，buildings包含建筑物高度，he">
-<meta name="twitter:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/planet.PNG">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/planet.PNG">
 
 
 
@@ -325,7 +325,7 @@
       
 
       
-        <p>网规网优项目中通常要用到地图数据，常见的地图格式有planet和osm，真正工程项目中一般用的是planet格式的地图，平时算法验证一般用Matlab，今天尝试了一下Matlab读取planet地图。<br>planet地图的demo可以在<a href="http://download.csdn.net/download/u013919202/6994471" target="_blank" rel="external">这里</a>下载，本文用这个demo的“南宁5-planet”为例，一般地图里包含以下几个文件夹：<br><img src="http://7qn8bw.com1.z0.glb.clouddn.com/planet.PNG" alt=""><br>clutter里包含每个栅格的地物类型，buildings包含建筑物高度，heights是栅格的海拔高度，vector是矢量地图，暂时先不管。<br>以读取clutter为例，clutter文件夹内包含三个文件：clutter.bil、index.txt、menu.txt。<br>menu.txt的内容为：</p>
+        <p>网规网优项目中通常要用到地图数据，常见的地图格式有planet和osm，真正工程项目中一般用的是planet格式的地图，平时算法验证一般用Matlab，今天尝试了一下Matlab读取planet地图。<br>planet地图的demo可以在<a href="http://download.csdn.net/download/u013919202/6994471" target="_blank" rel="external">这里</a>下载，本文用这个demo的“南宁5-planet”为例，一般地图里包含以下几个文件夹：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/planet.PNG" alt=""><br>clutter里包含每个栅格的地物类型，buildings包含建筑物高度，heights是栅格的海拔高度，vector是矢量地图，暂时先不管。<br>以读取clutter为例，clutter文件夹内包含三个文件：clutter.bil、index.txt、menu.txt。<br>menu.txt的内容为：</p>
 <blockquote>
 <p>1   sea<br>2   Inland water<br>3   wet land<br>4   Open in SubUrban<br>5   Open in urban<br>6   green land<br>7   forest<br>8   Super_high_Buildings (heights &gt; 60m)<br>9   hight buildings (heights &gt; 40m)<br>10  Dense urban high (heights 40m~20m)<br>11  Dense urban  (heigh &lt; 20m)<br>12  Residential high (heigh &lt; 20m)<br>13  Industrial and commercial (heights <20m &="" area=""> 20m*40m)<br>14  Dense urban low (height &lt; 20m)<br>15  Villages</20m></p>
 </blockquote>
@@ -343,7 +343,7 @@
 <li>byteorder是大端序还是小段序，用vim查看clutter.bil文件的二进制，由取值范围是1-16，容易得到是大端序。其实该bil文件本质也可以看成是一个内存映射文件，但是matlab的memmapfile函数默认是用小端序，所以还是用multibandread来的方便。</li>
 </ul>
 <p>所以最后代码是：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; clutter = multibandread(&apos;clutter.bil&apos;, [460 463 1], &apos;uint16&apos;, 0, &apos;bil&apos;, &apos;ieee-be&apos;);</div><div class="line">&gt;&gt; x = 224202.20 : 5 : 226517.20-1;</div><div class="line">&gt;&gt; y = 2523281.10 : 5 : 2525581.10-1;</div><div class="line">&gt;&gt; imagesc(x, y, clutter), axis equal</div></pre></td></tr></table></figure></p>
-<p><img src="http://7qn8bw.com1.z0.glb.clouddn.com/clutter.png" alt="clutter"></p>
+<p><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/clutter.png" alt="clutter"></p>
 <p>同理可得海拔高度和建筑高度。</p>
 
       
@@ -514,7 +514,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>

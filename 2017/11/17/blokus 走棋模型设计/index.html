@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="Yangxixi">
 <meta property="og:description" content="今年公司的算法大赛是每只队伍设计一个blokus的走棋程序，规则很简单，标准的blokus二对二，我抽空也训练了一个模型。比赛方提供了大约5w局的棋局数据（replay格式，其实内容就是一个json的数组），还提供了去年比赛的九强的程序（去年比赛的九强是基于规则和搜索的方法做的，exe格式），以及一个对战server（exe格式）。 估计大家的思路都比较类似，模仿AlphaGo，先用这5万局数据，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_step_16.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_step_17.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_step_18.png">
-<meta property="og:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_%20convergence.jpg">
-<meta property="og:updated_time" content="2017-11-19T14:53:34.000Z">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_step_16.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_step_17.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_step_18.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_coveragence.jpg">
+<meta property="og:updated_time" content="2020-06-27T03:00:28.504Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="blokus 走棋模型设计">
 <meta name="twitter:description" content="今年公司的算法大赛是每只队伍设计一个blokus的走棋程序，规则很简单，标准的blokus二对二，我抽空也训练了一个模型。比赛方提供了大约5w局的棋局数据（replay格式，其实内容就是一个json的数组），还提供了去年比赛的九强的程序（去年比赛的九强是基于规则和搜索的方法做的，exe格式），以及一个对战server（exe格式）。 估计大家的思路都比较类似，模仿AlphaGo，先用这5万局数据，">
-<meta name="twitter:image" content="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_step_16.png">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_step_16.png">
 
 
 
@@ -327,7 +327,7 @@
       
 
       
-        <p>今年公司的算法大赛是每只队伍设计一个<a href="https://en.wikipedia.org/wiki/Blokus" target="_blank" rel="external">blokus</a>的走棋程序，规则很简单，标准的blokus二对二，我抽空也训练了一个模型。<br>比赛方提供了大约5w局的棋局数据（<a href="http://7qn8bw.com1.z0.glb.clouddn.com/replay.txt" target="_blank" rel="external">replay</a>格式，其实内容就是一个json的数组），还提供了去年比赛的九强的程序（去年比赛的九强是基于规则和搜索的方法做的，exe格式），以及一个对战server（exe格式）。</p>
+        <p>今年公司的算法大赛是每只队伍设计一个<a href="https://en.wikipedia.org/wiki/Blokus" target="_blank" rel="external">blokus</a>的走棋程序，规则很简单，标准的blokus二对二，我抽空也训练了一个模型。<br>比赛方提供了大约5w局的棋局数据（<a href="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/replay.txt" target="_blank" rel="external">replay</a>格式，其实内容就是一个json的数组），还提供了去年比赛的九强的程序（去年比赛的九强是基于规则和搜索的方法做的，exe格式），以及一个对战server（exe格式）。</p>
 <p>估计大家的思路都比较类似，模仿AlphaGo，先用这5万局数据，基于监督学习训练一个初步的模型，再用强化学习进一步提升模型能力。</p>
 <h2 id="模型设计"><a href="#模型设计" class="headerlink" title="模型设计"></a>模型设计</h2><p>在AlphaGo的论文里，价值网络的效果比策略网络要好，但是</p>
 <ol>
@@ -350,10 +350,10 @@
 <li>两个对手的对角点标1，其他位置标0；</li>
 <li>全1平面，考虑到初始局面时，其他所有channel都是全0矩阵，这样模型的weight就失效了，放一个全1平面；</li>
 <li>棋子的ID，用于标识哪些棋子已经下过了；</li>
-<li>棋子的下子顺序。<br>生成张量时我旋转了棋面，保证当前棋手是左上角的棋手，且保证当前棋手是标识为1的棋手，直觉上这样能减少对偶程度，更容易训练一些。<br>例如某个棋局的第16，17，18步生成的张量如下：<br><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_step_16.png" alt="step16"><br><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_step_17.png" alt="step17"><br><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_step_18.png" alt="step18"></li>
+<li>棋子的下子顺序。<br>生成张量时我旋转了棋面，保证当前棋手是左上角的棋手，且保证当前棋手是标识为1的棋手，直觉上这样能减少对偶程度，更容易训练一些。<br>例如某个棋局的第16，17，18步生成的张量如下：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_step_16.png" alt="step16"><br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_step_17.png" alt="step17"><br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_step_18.png" alt="step18"></li>
 </ol>
 <p>训练时其实我只用了前七个channel，第8和第9张channel我用来做合法性判断的，没有用第8个channel是因为棋子的ID我直接用了比赛官方的标记方式，5个格子的就是5XX，4个格子的是4XX，这样对1个格子的感觉很不公平，感觉很可能对模型有误导；而没有用第9个channel是因为觉得下一步走法就只和当前棋面有关系，和之前下子的顺序应该无关（这个想法有可能有问题，AlphaGo的张量设计里有大量和下子顺序相关的channel）<br>代码在<a href="https://github.com/yezhangxiang/blokus" target="_blank" rel="external">这里</a>，用<a href="https://github.com/yezhangxiang/blokus/blob/master/generate_tensor.py" target="_blank" rel="external">generate_tensor</a>生成张量，用<a href="https://github.com/yezhangxiang/blokus/blob/master/collect_tensor_and_label.py" target="_blank" rel="external">collect_tensor_and_label</a>将张量路径和lable整合到一个文件中，作为训练的输入。</p>
-<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>用125w张tensor作为训练数据，10w张tensor作为validate，收敛曲线如下：<br><img src="http://7qn8bw.com1.z0.glb.clouddn.com/20171115_%20convergence.jpg" alt="converagence"><br>这个结果大大出乎我的意料，train和validate表现出一致性，虽然准确性相差较大，但是趋势是一致的。用的是resnet32，也尝试了其他的层数，16层收敛要差10个百分点左右，64层效率慢1倍多<br>其实我对模型能否区分这么多类并没有信心，检查了一下模型是否真的学会了走棋的规则：</p>
+<h2 id="模型训练"><a href="#模型训练" class="headerlink" title="模型训练"></a>模型训练</h2><p>用125w张tensor作为训练数据，10w张tensor作为validate，收敛曲线如下：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20171115_coveragence.jpg" alt="converagence"><br>这个结果大大出乎我的意料，train和validate表现出一致性，虽然准确性相差较大，但是趋势是一致的。用的是resnet32，也尝试了其他的层数，16层收敛要差10个百分点左右，64层效率慢1倍多<br>其实我对模型能否区分这么多类并没有信心，检查了一下模型是否真的学会了走棋的规则：</p>
 <ol>
 <li>top5的走子合法性是0.7367，0.6397，0.5846，0.5378，0.5128。这个结果比我想象的好，模型给的top1动作73.67%是合法的，而且top1至top5的合法性依次降低，说明模型确实很大程度上学会了走子规则；</li>
 <li>如果看top5的走子中存在合法走子规则的概率（也就是说top5有一个是合法的就算合法）是96.7%，看top10的话更是高达99.1%，而且不合法的走子，基本上是因为确实已经无路可走了。<br>也就是说用当前训练的这个模型已经可以用于实战了。</li>
@@ -641,7 +641,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2017</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
