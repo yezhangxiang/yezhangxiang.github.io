@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Algorithm, delaunay," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="引delaunay三角剖分有很成熟的算法，，但是算法大都是给定一个点集，输出三角剖分后的结果。但是再点集是动态增加删除的场景，每次如果增加一个点都重新对全局做剖分，明显效率非常的浪费，本文主要探讨在已剖分好的三角网格上，动态增加点或者删除点，只通过局部调整保持全局合法的三角剖分。 背景算法介绍常用的Delaunay算法有翻边算法、逐点插入算法、分割合并算法、Bowyer-Watson算法等，我们这">
+<meta name="keywords" content="Algorithm, delaunay">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Delaunay三角网格动态添加删除点">
+<meta property="og:url" content="http://yezhangxiang.com/2020/06/27/Delaunay三角网格动态添加删除点/index.html">
+<meta property="og:site_name" content="Yangxixi">
+<meta property="og:description" content="引delaunay三角剖分有很成熟的算法，，但是算法大都是给定一个点集，输出三角剖分后的结果。但是再点集是动态增加删除的场景，每次如果增加一个点都重新对全局做剖分，明显效率非常的浪费，本文主要探讨在已剖分好的三角网格上，动态增加点或者删除点，只通过局部调整保持全局合法的三角剖分。 背景算法介绍常用的Delaunay算法有翻边算法、逐点插入算法、分割合并算法、Bowyer-Watson算法等，我们这">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627superTriangle.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627insertPoint.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627legalizeEdge.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627addPoint.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-27.22.45.02.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-27.22.45.22.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-27.21.34.04.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-2721.50.28.png">
+<meta property="og:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-27.21.34.21.png">
+<meta property="og:updated_time" content="2020-06-27T15:07:36.450Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Delaunay三角网格动态添加删除点">
+<meta name="twitter:description" content="引delaunay三角剖分有很成熟的算法，，但是算法大都是给定一个点集，输出三角剖分后的结果。但是再点集是动态增加删除的场景，每次如果增加一个点都重新对全局做剖分，明显效率非常的浪费，本文主要探讨在已剖分好的三角网格上，动态增加点或者删除点，只通过局部调整保持全局合法的三角剖分。 背景算法介绍常用的Delaunay算法有翻边算法、逐点插入算法、分割合并算法、Bowyer-Watson算法等，我们这">
+<meta name="twitter:image" content="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627superTriangle.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yezhangxiang.com/2020/06/27/Delaunay三角网格动态添加删除点/"/>
+
+
+
+
+
+  <title>Delaunay三角网格动态添加删除点 | Yangxixi</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Yangxixi</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yezhangxiang.com/2020/06/27/Delaunay三角网格动态添加删除点/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yangxixi">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Yangxixi">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Delaunay三角网格动态添加删除点</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-27T00:00:00+08:00">
+                2020-06-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法设计/" itemprop="url" rel="index">
+                    <span itemprop="name">算法设计</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="引"><a href="#引" class="headerlink" title="引"></a>引</h2><p>delaunay三角剖分有很成熟的算法，，但是算法大都是给定一个点集，输出三角剖分后的结果。但是再点集是动态增加删除的场景，每次如果增加一个点都重新对全局做剖分，明显效率非常的浪费，本文主要探讨在已剖分好的三角网格上，动态增加点或者删除点，只通过局部调整保持全局合法的三角剖分。</p>
+<h2 id="背景算法介绍"><a href="#背景算法介绍" class="headerlink" title="背景算法介绍"></a>背景算法介绍</h2><p>常用的Delaunay算法有翻边算法、逐点插入算法、分割合并算法、Bowyer-Watson算法等，我们这里基于<a href="https://baike.baidu.com/item/%E8%AE%A1%E7%AE%97%E5%87%A0%E4%BD%95%EF%BC%9A%E7%AE%97%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8/2003074?fr=aladdin" target="_blank" rel="external">计算几何：算法与应用</a>中介绍的随机增量式算法。先介绍原始算法：</p>
+<ol>
+<li>先用一个足够大的三角形把整个点集都包围起来，如下图：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627superTriangle.png" alt="superTriangle" width="35%"></li>
+<li>按随机次序逐一插入各点，整个过程中，都要维护并更新一个与当前点集对应的Delaunay三角剖分。考虑引入点$p_r$的情况。<br>  2.1 确定$p_r$落在某个三角形内，将$p_r$与该三角形的三个顶点相连形成新的三个三角形<br>  2.2 如果$p_r$碰巧落在某条边$e$上，找到$e$关联的两个三角形，然后将$p_r$与对顶的两个顶点相连，生成4个新三角形<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627insertPoint.png" alt="insertPoint" width="70%"></li>
+<li>引入点$p_r$后原来某些边可能不再合法，对每一条可能的非法边调用子函数LegalizeEdge，如下图，插入$p_r$后，边$p_ip_j$可能是非法边，找到共边三角形的另一个顶点$p_k$，若$p_k$在三角形$p_rp_ip_j$的外接圆内，说明边$p_ip_j$非法，断开$p_ip_j$，链接$p_rp_k$，但$p_jp_k$和$p_ip_k$有可能又变成非法边，对他们递归调用LegalizeEdge。<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627legalizeEdge.png" alt="legalizeEdge" width="70%"></li>
+<li>删除第一步引入的超大三角形顶点及其相连的边</li>
+</ol>
+<h2 id="增加一个点"><a href="#增加一个点" class="headerlink" title="增加一个点"></a>增加一个点</h2><p>原始算法就是一个一个点插入，乍一想以为照旧插入点即可，这里有个坑，原始算法初始构造了超大三角形，最后删除掉了：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">triangulate</span><span class="params">()</span> <span class="keyword">throws</span> IllegalArgumentException </span>&#123;</div><div class="line">    triangleSoup = <span class="keyword">new</span> TriangleSoup();</div><div class="line">    <span class="keyword">if</span> (pointSet == <span class="keyword">null</span> || pointSet.size() &lt; <span class="number">3</span>) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Less than three points in point set."</span>);</div><div class="line">    &#125;</div><div class="line">    Triangle superTriangle = generateSuperTriangle();</div><div class="line">    triangleSoup.add(superTriangle);</div><div class="line">    <span class="keyword">for</span> (Point point : pointSet) &#123;</div><div class="line">        insertOnePoint(point);</div><div class="line">    &#125;</div><div class="line">    <span class="comment">/**</span></div><div class="line"><span class="comment">     * Remove all triangles that contain vertices of the super triangle.</span></div><div class="line"><span class="comment">     */</span></div><div class="line">    triangleSoup.removeTrianglesUsing(superTriangle.a);</div><div class="line">    triangleSoup.removeTrianglesUsing(superTriangle.b);</div><div class="line">    triangleSoup.removeTrianglesUsing(superTriangle.c);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>如果插入一个点就不能保证新增加的点在三角形内或边上。如果新增点在三角网格之外，再补上所有新增三角形，情况就比较复杂，如下图，插入点GHI新增的三角形个数不同，比较麻烦。<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/20200627addPoint.png" alt="addPoint" width="40%"><br>因此最简单的方式是，三角剖分后不删除超大三角形，在get的时候才删除。这样三角剖分后，仍可以插入点。所以代码如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">triangulate</span><span class="params">()</span> <span class="keyword">throws</span> IllegalArgumentException </span>&#123;</div><div class="line">    <span class="keyword">this</span>.triangleSoup = <span class="keyword">new</span> TriangleSoup();</div><div class="line">    <span class="keyword">if</span> (pointSet == <span class="keyword">null</span> || pointSet.size() &lt; <span class="number">3</span>) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Less than three points in point set."</span>);</div><div class="line">    &#125;</div><div class="line">    superTriangle = generateSuperTriangle();</div><div class="line">    triangleSoup.add(superTriangle);</div><div class="line">    <span class="keyword">for</span> (Point point : pointSet) &#123;</div><div class="line">        insertOnePoint(point);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> List&lt;Triangle&gt; <span class="title">getTriangles</span><span class="params">()</span> </span>&#123;</div><div class="line">    TriangleSoup triangleSoup1 = <span class="keyword">new</span> TriangleSoup(triangleSoup);</div><div class="line">    <span class="comment">// Remove all triangles that contain vertices of the super triangle.</span></div><div class="line">    <span class="keyword">if</span> (superTriangle != <span class="keyword">null</span>) &#123;</div><div class="line">        triangleSoup1.removeTrianglesUsing(superTriangle.getA());</div><div class="line">        triangleSoup1.removeTrianglesUsing(superTriangle.getB());</div><div class="line">        triangleSoup1.removeTrianglesUsing(superTriangle.getC());</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> triangleSoup1.getTriangles();</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addPoint</span><span class="params">(Point point)</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (pointSet.contains(point)) &#123;</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    pointSet.add(point);</div><div class="line">    <span class="keyword">if</span> (pointSet.size() &lt; <span class="number">3</span>) &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Less than three points in point set."</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span> (pointSet.size() == <span class="number">3</span>) &#123;</div><div class="line">        triangulate();</div><div class="line">        <span class="keyword">return</span>;</div><div class="line">    &#125;</div><div class="line">    insertOnePoint(point);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="删除一个点"><a href="#删除一个点" class="headerlink" title="删除一个点"></a>删除一个点</h2><p>比起新增点，删除点要麻烦的多。<br>第一个idea，把要删除点影响的三角形全部删除，再对相邻点的点集重新做delaunay生成局部补丁，再将补丁补回整体网格上：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-27.22.45.02.png" alt="patchExample"><br>这个idea有个明显的bug，如果待删除点和相邻点构成的多边形不是凸的，局部补丁就会冗余出三角形，如下，橘色三角形会生成两次：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-27.22.45.22.png" alt="patchBugExample"><br>而且，新生成的边仍然可能是非法边，比如EF边可能就是非法边<br>第二个idea，把要删除点看成是移动到一个相邻点而湮灭掉了，这样带动边一起湮灭，如果选取合适的相邻点，可以避免上面的生成冗余三角形的问题。<br>但是这个idea也是有问题的，很容易就构造出一个反例，无论移动到那个相邻点都会生成非法三角形，如下图，绿线是点H删除后合理的边，点H无论是移动到BCDEJK任一点都无法覆盖到绿线：<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-27.21.34.04.png" alt="wrongIdea" width="60%"><br>因此有回到第一个idea，进行改进：</p>
+<ol>
+<li>生成待删除点相关三角形的并集多边形，即图remove2的多边形ARBCDEF</li>
+<li>删除所有的待删除点相关三角形</li>
+<li>待删除点相邻点组成局部点集进行delaunay剖分生成局部补丁</li>
+<li>遍历局部补丁的所有三角形，删除不在多边形内的三角形</li>
+<li>将过滤后的局部补丁补回全体三角网格</li>
+<li>对并集多边形的边做LegalizeEdge</li>
+</ol>
+<p>具体代码实现见<a href="https://github.com/yezhangxiang/Matrix" target="_blank" rel="external">delaunayCode</a>，代码中附带一个可视化测试工具，右键增加一个点，左键删除一个点，增加点似乎不太有bug，但是删除点在点很密集的情况下仍然会触发bug<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-2721.50.28.png" alt="removePointBug" width="60%"><br>可能的原因是：</p>
+<ol>
+<li>算法还是不完备，是否有可能局部delaunay三角剖分不包含并集多边形的某条边</li>
+<li>三边形是否在并集多边形内，是通过判断三角形的重心是否在并集多边形内判断的，点在多边形内用的是cross-ray算法，这个算法在边界情况有问题，比如下图中的M点和Z点都会被判断在多边形外，因为这两个测试点和两个顶点在同一水平线上。<br><img src="https://yangxixi-blog-1302512282.cos.ap-shanghai.myqcloud.com/2020-06-27.21.34.21.png" alt="crossRayBug" width="40%"><br>有空再进一步完善吧，写这种计算几何的算法博客太费劲了，插入图片这么多，麻烦。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Algorithm-delaunay/" rel="tag"># Algorithm, delaunay</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/17/blokus 走棋模型设计/" rel="next" title="blokus 走棋模型设计">
+                <i class="fa fa-chevron-left"></i> blokus 走棋模型设计
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">yangxixi</p>
+              <p class="site-description motion-element" itemprop="description">The Aha Moments</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">39</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          <div class="links-of-author motion-element">
+            
+          </div>
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#引"><span class="nav-number">1.</span> <span class="nav-text">引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#背景算法介绍"><span class="nav-number">2.</span> <span class="nav-text">背景算法介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#增加一个点"><span class="nav-number">3.</span> <span class="nav-text">增加一个点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#删除一个点"><span class="nav-number">4.</span> <span class="nav-text">删除一个点</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yangxixi</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.3</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config("");
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="custom_mathjax_source">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
